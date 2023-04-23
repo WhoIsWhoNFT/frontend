@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 const BtnCounter = styled.button`
@@ -24,6 +24,10 @@ const InputMint = styled.input`
     border: 0;
     outline: none !important;
     text-align: center;
+    font-family: 'digitalNormal';
+    font-size: 1.2rem;
+    font-weight: 1000;
+    letter-spacing: 3px;
 
     &:focus{
         border: 0;
@@ -42,15 +46,18 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    position: relative;
 `
 
 const BtnBG = styled.div`
-    width: 20em;
+    width: 24rem;
     height: 3rem;
     display: flex;
     padding: 0.5rem 1.5rem;
     clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
     background-color: #1d803e;
+    position: relative;
+    z-index: 3;
 `
 
 const MintBtn = styled.button`
@@ -70,20 +77,32 @@ const GlowWrapper = styled.div<{color1?: string, color2?: string}>`
 `
 
 const MintButton: React.FC<{}> = ({}) => {
+    const [mintCount, setMintCount] = useState(2);
+
+    const handleIncrement = () => {
+        setMintCount((prevCount) => prevCount + 1);
+    };
+
+      const handleDecrement = () => {
+        if (mintCount > 1) {
+            setMintCount((prevCount) => prevCount - 1);
+        }
+    };
+
     return(<>
         <AppContainer>
             <Container>
                 <BtnBG>
                     <GlowWrapper>
-                        <BtnCounter className='buttonGlow'>
+                        <BtnCounter className='buttonGlow' onClick={handleDecrement}>
                             <span><b>-</b></span>
                         </BtnCounter>
                     </GlowWrapper>
                     <InputStyle>
-                        <InputMint type="text" id="fname" name="fname"></InputMint>
+                        <InputMint type="text" id="fname" name="fname" value={mintCount}></InputMint>
                     </InputStyle>
                     <GlowWrapper>
-                        <BtnCounter className='buttonGlow'>
+                        <BtnCounter className='buttonGlow' onClick={handleIncrement}>
                             <span><b>+</b></span>
                         </BtnCounter>
                     </GlowWrapper>

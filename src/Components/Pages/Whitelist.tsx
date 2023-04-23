@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { CRT, Terminal } from '../Styled';
+import { type, clear, pause } from '../Functions/type';
+import { CRT, Terminal, TerminalContainer } from '../Styled';
 import useWalletChecker from '../../Hooks/useWalletChecker';
 
 const AppContainer = styled.div`
@@ -69,10 +71,62 @@ const IsWhitelistedText = styled.div`
     color: white;
     margin: 5rem auto;
     text-align: center;
+
+    @media (max-width: 650px){
+        font-size: 1.2rem;
+    }
 `;
+
+const Header = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem 3rem;
+    font-size: 2rem;
+
+    @media (max-width: 650px){
+        font-size: 1.2rem;
+    }
+`
 
 export default function App() {
     const isWhitelisted = useWalletChecker();
+
+    function ClearContent() {
+        const elContent = document.querySelector('#terminalContent');
+        clear(elContent);
+    }
+
+    async function TypeResult(){
+        const elContent = document.querySelector('#terminalContent');
+        await type(
+            'LOADING...',
+            {
+                wait: 300,
+                initialWait: 0,
+                finalWait: 3500,
+                processChars: true,
+            },
+            elContent
+        );
+        ClearContent()
+        await pause(1);
+        await type(
+            isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist",
+            {
+                wait: 15,
+                initialWait: 0,
+                finalWait: 3000,
+                processChars: true,
+            },
+            elContent
+        );
+    }
+
+    useEffect(() => {
+        TypeResult();
+    }, []);
 
     return (
         <AppContainer className="Whitelist">
@@ -80,12 +134,14 @@ export default function App() {
                 <div className="scanline"></div>
                 <Terminal className="terminal">
                     <Modal>
-                        <h1 style={{ fontSize: '2rem' }}>WHITELIST CHECKER</h1>
+                        <Header>
+                            <h1>WHITELIST_CHECKER.exe</h1>
+                        </Header>
                         <Content>
                             <IsWhitelistedText>
-                                {isWhitelisted
-                                    ? "Congrats you're whitelisted"
-                                    : "Sorry you're not in the whitelist"}
+                            <Terminal className="terminal">
+                                <TerminalContainer id='terminalContent' />
+                            </Terminal>
                             </IsWhitelistedText>
                         </Content>
                     </Modal>

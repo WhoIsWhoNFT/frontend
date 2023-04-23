@@ -10,6 +10,10 @@ import useWeb3 from './Store/useWeb3';
 const Container = styled.div`
     position: relative;
     display: flex;
+
+    @media only screen and (max-width: 958px) {
+      transform: translateY(4rem);
+    }
 `;
 
 const ModalBG = styled(animated.div)`
@@ -44,7 +48,48 @@ const AppNav = styled.div`
     font-size: 1.8rem;
     letter-spacing: 3px;
     font-family: 'ADrip';
+
+    @media (max-width: 800px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-size: 1.5rem;
+    }
 `;
+
+const DisconnectBtn = styled(animated.button)`
+    width: 10.8rem;
+    height: 2.5rem;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    position: absolute;
+    background-color: #e63525;
+    z-index: 3;
+    font-family: 'VT323', monospace;
+    transform: translate(4%, 100%);
+    -webkit-transition: all .15s ease-in-out;
+    transition: box-shadow .15s ease-in-out;
+    clip-path: polygon(0px 0px, 100% 0px, 100% 80%, 95% 100%, 5% 100%, 0px 80%);
+
+    &:hover{
+        box-shadow: 0 0 20px 0 #00d7c3 inset, 0 0 50px 15px #00d7c3;
+    }
+`;
+
+const MobileHeader = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    align-items: center;
+    background-color: #2d3e4c;
+    font-family: VT323, monospace;
+`
 
 function App() {
     const connectWeb3 = useWeb3(state => state.connectWeb3);
@@ -54,17 +99,19 @@ function App() {
     const [tab, setTab] = useState(0);
 
     const [style, api] = useSpring(() => ({
-        transform: 'translate(100%, 0)',
-    }));
+        transform: 'translate(4%, 0%)',
+    }))
+
+    const [isScreenLimit, setIsScreenLimit] = useState(false);
 
     const handleClick = () => {
         if (!open) {
             api.start({
-                transform: 'translate(0%, 0)',
+                transform: 'translate(4%, 100%)',
             });
         } else {
             api.start({
-                transform: 'translate(100%, 0)',
+                transform: 'translate(4%, 0%)',
             });
         }
         setOpen(!open);
@@ -80,6 +127,18 @@ function App() {
         return () => {};
     }, [connectWeb3]);
 
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsScreenLimit(window.innerWidth < 976);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
     return (
         <div className="App">
             <header className="App-header">
@@ -87,31 +146,62 @@ function App() {
                     <div className="Shape-circle" />
                     <div className="Header-content">
                         <HeaderText className="Header-contnet-left">
-                            <p>5000 COLLECTION MINT PRICE: 0.025ETH</p>
+                            {isScreenLimit ? (
+                                <></>
+                            ) : (
+                                <p>5000 COLLECTION MINT PRICE: 0.025ETH</p>
+                            )}
                         </HeaderText>
                         <div className="Header-content-right">
-                            <div className="Socials">
-                                <ButtonIcon icon="opensea" />
-                                <ButtonIcon icon="twitter" />
-                                <ButtonIcon icon="discord" />
-                            </div>
+                            {isScreenLimit ? (
+                                <></>
+                            ) : (
+                                <div className="Socials">
+                                    <ButtonIcon icon="opensea" />
+                                    <ButtonIcon icon="instagram"  link='https://www.instagram.com/whoiswho.crew/'/>
+                                    <ButtonIcon icon="twitter" />
+                                    <ButtonIcon icon="discord" />
+                                </div>
+                            )}
                             <Grills />
 
                             <ButtonGlitch
+                                signed={signer}
                                 className="button-glitch"
                                 style={{
                                     margin: '0 -0.35rem 0 2rem',
-                                    fontFamily: 'aAnotherTag',
-                                    fontSize: '2rem',
+                                    fontFamily: `${signer ? 'VT323, monospace' : 'aAnotherTag'}`,
+                                    fontSize: `${signer ? '1rem' : ''}`,
                                     letterSpacing: '3px',
                                     lineHeight: '20px',
                                 }}
                                 type="submit"
+                                onClick={() => {
+                                    if(signer){
+                                        handleClick()
+                                    }
+                                }}
                             >
                                 {renderAccount()}
                             </ButtonGlitch>
+                            <DisconnectBtn style={style}>
+                                <span>Disconnect?</span>
+                            </DisconnectBtn>
                         </div>
                     </div>
+                    {isScreenLimit ? (
+                        <MobileHeader>
+                            <p>5000 COLLECTION MINT PRICE: 0.025ETH</p>
+                            <div className="Socials">
+                                <ButtonIcon icon="opensea" />
+                                <ButtonIcon icon="instagram"  link='https://www.instagram.com/whoiswho.crew/'/>
+                                <ButtonIcon icon="twitter" />
+                                <ButtonIcon icon="discord" />
+                            </div>
+                        </MobileHeader>
+                    ) : (
+                        <></>
+                    )}
                     <AppNav>
                         <div className="noselect">
                             <span
@@ -132,7 +222,7 @@ function App() {
                                 ROADMAP
                             </span>
                             |
-                            <span
+                            {/* <span
                                 onClick={() => {
                                     setTab(2);
                                 }}
@@ -140,7 +230,7 @@ function App() {
                             >
                                 TEAM
                             </span>
-                            |
+                            | */}
                             <span
                                 onClick={() => {
                                     setTab(3);

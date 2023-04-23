@@ -22,8 +22,8 @@ const Container = styled('div', {
 
 const Box = styled('div', {
     position: 'relative',
-    height: 'calc(14vw * 0.8)',
-    width: 'calc(14vw * 0.8)',
+    height: '13rem',
+    width: '13rem',
 })
 
 const SharedStyles = {

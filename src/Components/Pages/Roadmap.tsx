@@ -30,7 +30,6 @@ export default function App() {
     }
 
     async function FillRM() {
-        await pause(0.1);
         const elContent = document.querySelector('#terminalContent');
         ClearContent();
         await type(
@@ -38,6 +37,7 @@ export default function App() {
             {
                 wait: 5,
                 initialWait: 0,
+                typerClass: 'roadmapHeader',
                 styles: 'font-size: 2.5rem; display: flex;',
                 processChars: true,
             },
@@ -49,7 +49,7 @@ export default function App() {
                 '\tCRAFTING THE ART.........................[✓]',
                 '\tWEBSITE UI/UX DRAFT......................[✓]',
                 '\tWEBSITE DEVELOPMENT......................[✓]',
-                '\tWEBSITE LAUNCH...........................[ ]',
+                '\tWEBSITE LAUNCH...........................[✓]',
                 '\tMINT [TBA]...............................[ ]',
                 '\tREVEAL...................................[ ]',
                 '\tRARE HOLDERS REWARD DROPS [PHYSICAL].....[ ]',
@@ -61,6 +61,7 @@ export default function App() {
                 initialWait: 0,
                 finalWait: 0,
                 lineWait: 0,
+                typerClass: 'roadmapList',
                 styles: 'font-size: 1.5rem;',
                 processChars: true,
             },
@@ -72,7 +73,6 @@ export default function App() {
             ],
             {
                 lineWait: 999999,
-                styles: 'font-size: 1.5rem;',
             },
             elContent
         )
