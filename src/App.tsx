@@ -188,9 +188,13 @@ function App() {
                             >
                                 {renderAccount()}
                             </ButtonGlitch>
-                            <DisconnectBtn style={style}>
-                                <span>Disconnect?</span>
-                            </DisconnectBtn>
+                            {signer ? (
+                                <DisconnectBtn style={style}>
+                                    <span>Disconnect?</span>
+                                </DisconnectBtn>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                     {isScreenLimit ? (
