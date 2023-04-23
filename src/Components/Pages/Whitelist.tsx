@@ -113,7 +113,7 @@ export default function App() {
         ClearContent()
         await pause(1);
         await type(
-            isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist",
+            isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n",
             {
                 wait: 15,
                 initialWait: 0,
