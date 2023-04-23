@@ -97,7 +97,7 @@ export default function App() {
     var whitelistResult:string = '';
 
     if(signer){
-        whitelistResult = isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n";
+        whitelistResult = isWhitelisted ? "Congrats you're whitelisted\n" : "Sorry, you're not in the whitelist\n";
     } else {
         whitelistResult = "Please connect wallet\n"
     }
