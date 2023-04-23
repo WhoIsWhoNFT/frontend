@@ -99,7 +99,7 @@ export default function App() {
     if(signer){
         whitelistResult = isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n";
     } else {
-        whitelistResult = "Please connect wallet"
+        whitelistResult = "Please connect wallet\n"
     }
 
     function ClearContent() {
