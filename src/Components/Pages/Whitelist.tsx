@@ -111,7 +111,17 @@ export default function App() {
             elContent
         );
         ClearContent()
-        await pause(1);
+        await type(
+            ' ',
+            {
+                wait: 0,
+                initialWait: 0,
+                finalWait: 1000,
+                processChars: true,
+            },
+            elContent
+        );
+        ClearContent()
         await type(
             isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n",
             {
