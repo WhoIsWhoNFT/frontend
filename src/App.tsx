@@ -59,7 +59,7 @@ const AppNav = styled.div`
 `;
 
 const DisconnectBtn = styled(animated.button)`
-    width: 10.8rem;
+    width: 9.6rem;
     height: 2.5rem;
     display: flex;
     -webkit-box-pack: center;
@@ -71,6 +71,7 @@ const DisconnectBtn = styled(animated.button)`
     z-index: 3;
     font-family: 'VT323', monospace;
     transform: translate(4%, 100%);
+    border-top: 5px solid black;
     -webkit-transition: all 0.15s ease-in-out;
     transition: box-shadow 0.15s ease-in-out;
     clip-path: polygon(0px 0px, 100% 0px, 100% 80%, 95% 100%, 5% 100%, 0px 80%);
@@ -176,7 +177,7 @@ function App() {
                                         signer ? 'VT323, monospace' : 'aAnotherTag'
                                     }`,
                                     fontSize: `${signer ? '1rem' : ''}`,
-                                    letterSpacing: '3px',
+                                    letterSpacing: signer ? '1.5px' : '3px',
                                     lineHeight: '20px',
                                 }}
                                 type="submit"
