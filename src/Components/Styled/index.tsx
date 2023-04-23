@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { animated } from '@react-spring/web'
+import { animated } from '@react-spring/web';
 import { fromPairs } from 'lodash';
-export { default as ButtonIcon } from './IconButton'
-export { default as MintButton } from './MintButton'
-export { CRT, Terminal, TerminalContainer } from './Crt'
-
+export { default as ButtonIcon } from './IconButton';
+export { default as MintButton } from './MintButton';
+export { CRT, Terminal, TerminalContainer } from './Crt';
 
 export const ButtonGlitch = styled.button<{ signed?: any }>`
     max-width: 26rem;
@@ -14,7 +13,7 @@ export const ButtonGlitch = styled.button<{ signed?: any }>`
     border: 0;
     color: #fff;
     letter-spacing: 2.5px;
-    box-shadow: 1rem 0px 0px ${({signed}) => signed ? '#00ffe1' : '#303030'};
+    box-shadow: 1rem 0px 0px ${({ signed }) => (signed ? '#00ffe1' : '#303030')};
     outline: transparent;
     position: relative;
     user-select: none;
@@ -22,8 +21,8 @@ export const ButtonGlitch = styled.button<{ signed?: any }>`
     touch-action: manipulation;
     position: relative;
     z-index: 5;
-`
+`;
 
 export const AnimFlex = styled(animated.div)`
-  display: flex;
+    display: flex;
 `;

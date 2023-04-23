@@ -73,7 +73,7 @@ const IsWhitelistedText = styled.div`
     margin: 5rem auto;
     text-align: center;
 
-    @media (max-width: 650px){
+    @media (max-width: 650px) {
         font-size: 1.2rem;
     }
 `;
@@ -86,20 +86,22 @@ const Header = styled.div`
     padding: 0.1rem 3rem;
     font-size: 2rem;
 
-    @media (max-width: 650px){
+    @media (max-width: 650px) {
         font-size: 1.2rem;
     }
-`
+`;
 
 export default function App() {
     const signer = useWeb3(state => state.signer);
     const isWhitelisted = useWalletChecker();
-    var whitelistResult:string = '';
+    var whitelistResult: string = '';
 
-    if(signer){
-        whitelistResult = isWhitelisted ? "Congrats you're whitelisted\n" : "Sorry, you're not in the whitelist\n";
+    if (signer) {
+        whitelistResult = isWhitelisted
+            ? "Congrats you're whitelisted\n"
+            : "Sorry, you're not in the whitelist\n";
     } else {
-        whitelistResult = "Please connect wallet\n"
+        whitelistResult = 'Please connect wallet\n';
     }
 
     function ClearContent() {
@@ -107,10 +109,10 @@ export default function App() {
         clear(elContent);
     }
 
-    async function TypeResult(){
+    async function TypeResult() {
         ClearContent();
         const elContent = document.querySelector('#terminalContent');
-        if(signer){
+        if (signer) {
             await type(
                 'LOADING...',
                 {
@@ -119,7 +121,7 @@ export default function App() {
                     finalWait: 3500,
                     processChars: true,
                 },
-                elContent
+                elContent,
             );
             ClearContent();
             await type(
@@ -130,9 +132,9 @@ export default function App() {
                     finalWait: 1000,
                     processChars: true,
                 },
-                elContent
+                elContent,
             );
-            ClearContent()
+            ClearContent();
         }
         await type(
             whitelistResult,
@@ -142,7 +144,7 @@ export default function App() {
                 finalWait: 3000,
                 processChars: true,
             },
-            elContent
+            elContent,
         );
     }
 
@@ -161,9 +163,9 @@ export default function App() {
                         </Header>
                         <Content>
                             <IsWhitelistedText>
-                            <Terminal className="terminal">
-                                <TerminalContainer id='terminalContent' />
-                            </Terminal>
+                                <Terminal className="terminal">
+                                    <TerminalContainer id="terminalContent" />
+                                </Terminal>
                             </IsWhitelistedText>
                         </Content>
                     </Modal>

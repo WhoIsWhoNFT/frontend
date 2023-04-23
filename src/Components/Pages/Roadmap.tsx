@@ -1,25 +1,25 @@
 import { useEffect, useState } from 'react';
 import { type, clear, pause } from '../Functions/type';
 import styled from 'styled-components';
-import { CRT, Terminal, TerminalContainer } from '../Styled'
+import { CRT, Terminal, TerminalContainer } from '../Styled';
 
-interface TypeProps{
-    wait?: number,
-    initialWait?: number,
-    finalWait?: number,
-    lineWait?: number,
-    typerClass?: string,
-    useContainer?: boolean,
-    stopBlinking?: boolean,
-    processChars?: boolean,
-    clearContainer?: boolean,
+interface TypeProps {
+    wait?: number;
+    initialWait?: number;
+    finalWait?: number;
+    lineWait?: number;
+    typerClass?: string;
+    useContainer?: boolean;
+    stopBlinking?: boolean;
+    processChars?: boolean;
+    clearContainer?: boolean;
 }
 
 const AppContainer = styled.div`
     width: 100%;
     height: 100%;
     display: block;
-`
+`;
 
 export default function App() {
     const [tab, setTab] = useState(0);
@@ -41,10 +41,11 @@ export default function App() {
                 styles: 'font-size: 2.5rem; display: flex;',
                 processChars: true,
             },
-            elContent
+            elContent,
         );
 
-        await type([
+        await type(
+            [
                 '\tART IDEATION.............................[✓]',
                 '\tCRAFTING THE ART.........................[✓]',
                 '\tWEBSITE UI/UX DRAFT......................[✓]',
@@ -65,38 +66,42 @@ export default function App() {
                 styles: 'font-size: 1.5rem;',
                 processChars: true,
             },
-            elContent
+            elContent,
         );
 
-        await type([
-                '\n',
-            ],
+        await type(
+            ['\n'],
             {
                 lineWait: 999999,
             },
-            elContent
-        )
+            elContent,
+        );
     }
 
     useEffect(() => {
         FillRM();
     }, []);
 
-    return (<>
-        <AppContainer>
-            <div id='screen' className="on" style={{
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-            }}>
-                <CRT id='crt'>
-                    <div className="scanline"></div>
-                    <Terminal className="terminal">
-                        <TerminalContainer id='terminalContent' />
-                    </Terminal>
-                </CRT>
-
-            </div>
-        </AppContainer>
-    </>)
+    return (
+        <>
+            <AppContainer>
+                <div
+                    id="screen"
+                    className="on"
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'relative',
+                    }}
+                >
+                    <CRT id="crt">
+                        <div className="scanline"></div>
+                        <Terminal className="terminal">
+                            <TerminalContainer id="terminalContent" />
+                        </Terminal>
+                    </CRT>
+                </div>
+            </AppContainer>
+        </>
+    );
 }

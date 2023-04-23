@@ -4,13 +4,12 @@ import styled from 'styled-components';
 import Countdown from 'react-countdown';
 
 type TimerProps = {
-    days?: number,
-    hours?: number,
-    minutes?: number,
-    seconds?: number,
-    completed?: boolean,
-}
-
+    days?: number;
+    hours?: number;
+    minutes?: number;
+    seconds?: number;
+    completed?: boolean;
+};
 
 const BannerName = styled.div`
     display: flex;
@@ -22,13 +21,13 @@ const BannerName = styled.div`
     width: 100%;
     height: 100%;
     position: relative;
-`
+`;
 
 const BannerLogo = styled.img`
     width: calc(10px + 100vmin);
     margin-right: -12vmin;
     display: block;
-`
+`;
 
 const Timer = styled.div`
     display: flex;
@@ -41,7 +40,7 @@ const Timer = styled.div`
     @media (max-width: 720px) {
         font-size: 1.2rem;
     }
-`
+`;
 const TimerFrame = styled.span`
     font-size: 1.3vw;
     transform: translateY(-0.5rem);
@@ -49,7 +48,7 @@ const TimerFrame = styled.span`
     @media (max-width: 720px) {
         font-size: 1rem;
     }
-`
+`;
 
 const MintInfo = styled.div`
     display: flex;
@@ -67,63 +66,69 @@ const MintInfo = styled.div`
     @media (max-width: 500px) {
         flex-flow: column wrap;
     }
-`
+`;
 
 const Completionist = () => <span>You are good to go!</span>;
 
 const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
-      // Render a completed state
-      return <Completionist />;
+        // Render a completed state
+        return <Completionist />;
     } else {
-      // Render a countdown
-      return (<>
-        <Timer className='glow'>
-            <div>
-                <span>{days}</span>
-                &nbsp;<TimerFrame>Days</TimerFrame>
-            </div>
-            <div>
-                <span>{hours}</span>
-                &nbsp;<TimerFrame>Hrs</TimerFrame>
-            </div>
-            <div>
-                <span>{minutes}</span>
-                &nbsp;<TimerFrame>Min</TimerFrame>
-            </div>
-            <div    >
-                <span>{seconds}</span>
-                &nbsp;<TimerFrame>Sec</TimerFrame>
-            </div>
-        </Timer>
-      </>);
+        // Render a countdown
+        return (
+            <>
+                <Timer className="glow">
+                    <div>
+                        <span>{days}</span>
+                        &nbsp;<TimerFrame>Days</TimerFrame>
+                    </div>
+                    <div>
+                        <span>{hours}</span>
+                        &nbsp;<TimerFrame>Hrs</TimerFrame>
+                    </div>
+                    <div>
+                        <span>{minutes}</span>
+                        &nbsp;<TimerFrame>Min</TimerFrame>
+                    </div>
+                    <div>
+                        <span>{seconds}</span>
+                        &nbsp;<TimerFrame>Sec</TimerFrame>
+                    </div>
+                </Timer>
+            </>
+        );
     }
 };
 
-
-
 export default function App() {
-    return (<>
-        <div className='Banner'>
-            <BannerName>
-                <Countdown
-                    date={Date.now() + 5000000}
-                    renderer={Renderer}
-                />
-                <BannerLogo src={require('../../Assets/images/main-logo.png')} alt="" />
-                <MintInfo>
-                    <div>Supply: 0 / 5000</div>
-                    <div>OG x 3</div>
-                    <div>WL x 2</div>
-                </MintInfo>
-            </BannerName>
-            <div className='ImgContainer' style={{justifyContent: 'left'}}>
-                <img className='Banner-model' src={require('../../Assets/images/blackplasticwho.png')} alt="" />
+    return (
+        <>
+            <div className="Banner">
+                <BannerName>
+                    <Countdown date={Date.now() + 5000000} renderer={Renderer} />
+                    <BannerLogo
+                        src={require('../../Assets/images/main-logo.png')}
+                        alt=""
+                    />
+                    <MintInfo>
+                        <div>Supply: 0 / 5000</div>
+                        <div>OG x 3</div>
+                        <div>WL x 2</div>
+                    </MintInfo>
+                </BannerName>
+                <div className="ImgContainer" style={{ justifyContent: 'left' }}>
+                    <img
+                        className="Banner-model"
+                        src={require('../../Assets/images/blackplasticwho.png')}
+                        alt=""
+                    />
+                </div>
             </div>
-        </div>
-        <div className='PrevCollections'>
-            <SlideCovers />
-        </div>
-        {/* <MintButton /> */}
-    </>)
+            <div className="PrevCollections">
+                <SlideCovers />
+            </div>
+            {/* <MintButton /> */}
+        </>
+    );
 }

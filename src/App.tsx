@@ -12,7 +12,7 @@ const Container = styled.div`
     display: flex;
 
     @media only screen and (max-width: 958px) {
-      transform: translateY(4rem);
+        transform: translateY(4rem);
     }
 `;
 
@@ -71,11 +71,11 @@ const DisconnectBtn = styled(animated.button)`
     z-index: 3;
     font-family: 'VT323', monospace;
     transform: translate(4%, 100%);
-    -webkit-transition: all .15s ease-in-out;
-    transition: box-shadow .15s ease-in-out;
+    -webkit-transition: all 0.15s ease-in-out;
+    transition: box-shadow 0.15s ease-in-out;
     clip-path: polygon(0px 0px, 100% 0px, 100% 80%, 95% 100%, 5% 100%, 0px 80%);
 
-    &:hover{
+    &:hover {
         box-shadow: 0 0 20px 0 #00d7c3 inset, 0 0 50px 15px #00d7c3;
     }
 `;
@@ -89,7 +89,7 @@ const MobileHeader = styled.div`
     align-items: center;
     background-color: #2d3e4c;
     font-family: VT323, monospace;
-`
+`;
 
 function App() {
     const connectWeb3 = useWeb3(state => state.connectWeb3);
@@ -100,7 +100,7 @@ function App() {
 
     const [style, api] = useSpring(() => ({
         transform: 'translate(4%, 0%)',
-    }))
+    }));
 
     const [isScreenLimit, setIsScreenLimit] = useState(false);
 
@@ -127,16 +127,15 @@ function App() {
         return () => {};
     }, [connectWeb3]);
 
-
     useEffect(() => {
-      const handleResize = () => {
-        setIsScreenLimit(window.innerWidth < 976);
-      };
+        const handleResize = () => {
+            setIsScreenLimit(window.innerWidth < 976);
+        };
 
-      window.addEventListener("resize", handleResize);
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     return (
@@ -158,7 +157,10 @@ function App() {
                             ) : (
                                 <div className="Socials">
                                     <ButtonIcon icon="opensea" />
-                                    <ButtonIcon icon="instagram"  link='https://www.instagram.com/whoiswho.crew/'/>
+                                    <ButtonIcon
+                                        icon="instagram"
+                                        link="https://www.instagram.com/whoiswho.crew/"
+                                    />
                                     <ButtonIcon icon="twitter" />
                                     <ButtonIcon icon="discord" />
                                 </div>
@@ -170,15 +172,17 @@ function App() {
                                 className="button-glitch"
                                 style={{
                                     margin: '0 -0.35rem 0 2rem',
-                                    fontFamily: `${signer ? 'VT323, monospace' : 'aAnotherTag'}`,
+                                    fontFamily: `${
+                                        signer ? 'VT323, monospace' : 'aAnotherTag'
+                                    }`,
                                     fontSize: `${signer ? '1rem' : ''}`,
                                     letterSpacing: '3px',
                                     lineHeight: '20px',
                                 }}
                                 type="submit"
                                 onClick={() => {
-                                    if(signer){
-                                        handleClick()
+                                    if (signer) {
+                                        handleClick();
                                     }
                                 }}
                             >
@@ -194,7 +198,10 @@ function App() {
                             <p>5000 COLLECTION MINT PRICE: 0.025ETH</p>
                             <div className="Socials">
                                 <ButtonIcon icon="opensea" />
-                                <ButtonIcon icon="instagram"  link='https://www.instagram.com/whoiswho.crew/'/>
+                                <ButtonIcon
+                                    icon="instagram"
+                                    link="https://www.instagram.com/whoiswho.crew/"
+                                />
                                 <ButtonIcon icon="twitter" />
                                 <ButtonIcon icon="discord" />
                             </div>
