@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { type, clear, pause } from '../Functions/type';
 import { CRT, Terminal, TerminalContainer } from '../Styled';
 import useWalletChecker from '../../Hooks/useWalletChecker';
+import useWeb3 from '../../Store/useWeb3';
 
 const AppContainer = styled.div`
     width: 100%;
@@ -91,7 +92,15 @@ const Header = styled.div`
 `
 
 export default function App() {
+    const signer = useWeb3(state => state.signer);
     const isWhitelisted = useWalletChecker();
+    var whitelistResult:string = '';
+
+    if(signer){
+        whitelistResult = isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n";
+    } else {
+        whitelistResult = "Please connect wallet"
+    }
 
     function ClearContent() {
         const elContent = document.querySelector('#terminalContent');
@@ -99,31 +108,34 @@ export default function App() {
     }
 
     async function TypeResult(){
+        ClearContent();
         const elContent = document.querySelector('#terminalContent');
+        if(signer){
+            await type(
+                'LOADING...',
+                {
+                    wait: 300,
+                    initialWait: 0,
+                    finalWait: 3500,
+                    processChars: true,
+                },
+                elContent
+            );
+            ClearContent();
+            await type(
+                ' ',
+                {
+                    wait: 0,
+                    initialWait: 0,
+                    finalWait: 1000,
+                    processChars: true,
+                },
+                elContent
+            );
+            ClearContent()
+        }
         await type(
-            'LOADING...',
-            {
-                wait: 300,
-                initialWait: 0,
-                finalWait: 3500,
-                processChars: true,
-            },
-            elContent
-        );
-        ClearContent()
-        await type(
-            ' ',
-            {
-                wait: 0,
-                initialWait: 0,
-                finalWait: 1000,
-                processChars: true,
-            },
-            elContent
-        );
-        ClearContent()
-        await type(
-            isWhitelisted ? "Congrats you're whitelisted" : "Sorry, you're not in the whitelist\n",
+            whitelistResult,
             {
                 wait: 15,
                 initialWait: 0,
@@ -136,7 +148,7 @@ export default function App() {
 
     useEffect(() => {
         TypeResult();
-    }, []);
+    }, [signer]);
 
     return (
         <AppContainer className="Whitelist">
