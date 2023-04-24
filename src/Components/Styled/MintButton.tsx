@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import collectionConfig from '../../Constants/collection.config';
+import useDynamicContractWrite from '../../Hooks/useDynamicContractWrite';
+import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -79,8 +82,16 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
         })`};
 `;
 
-const MintButton: React.FC<{}> = ({}) => {
+const MintButton: React.FC<{}> = () => {
+    const saleStage = useDynamicContractRead('getSaleStage');
+    const stageEnum = collectionConfig.stageEnum;
+    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+
     const [mintCount, setMintCount] = useState(2);
+
+    const ogMint = useDynamicContractWrite('ogMint', [mintCount]);
+    const wlMint = useDynamicContractWrite('wlMint', [mintCount]);
+    const publicMint = useDynamicContractWrite('mint', [mintCount]);
 
     const handleIncrement = () => {
         setMintCount(prevCount => prevCount + 1);
@@ -92,7 +103,17 @@ const MintButton: React.FC<{}> = ({}) => {
         }
     };
 
-    return (
+    const handleMint = () => {
+        if (currentStage === 'PRESALE_OG') {
+            ogMint?.write?.();
+        } else if (currentStage === 'PRESALE_WL') {
+            wlMint?.write?.();
+        } else if (currentStage === 'PUBLIC_SALE') {
+            publicMint?.write?.();
+        }
+    };
+
+    return currentStage !== 'IDLE' ? (
         <>
             <AppContainer>
                 <Container>
@@ -123,13 +144,15 @@ const MintButton: React.FC<{}> = ({}) => {
                 </Container>
                 <Container>
                     <GlowWrapper color1="#00d5ff" color2="#0053fa">
-                        <MintBtn>
+                        <MintBtn onClick={handleMint}>
                             <span>MINT</span>
                         </MintBtn>
                     </GlowWrapper>
                 </Container>
             </AppContainer>
         </>
+    ) : (
+        <></>
     );
 };
 
