@@ -1,13 +1,13 @@
-import { useRef, useState, useEffect, useLayoutEffect } from 'react'
-import { styled } from '@stitches/react'
-import { useTrail, animated, SpringValue } from '@react-spring/web'
+import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { styled } from '@stitches/react';
+import { useTrail, animated, SpringValue } from '@react-spring/web';
 
 const AppContainer = styled('div', {
     width: '100%',
     height: 'max-content',
     display: 'flex',
     justifyContent: 'center',
-})
+});
 
 const Container = styled('div', {
     width: '100%',
@@ -17,14 +17,14 @@ const Container = styled('div', {
     flexWrap: 'wrap',
     justifyContent: 'center',
     gap: 10,
-    background: '#d62020'
-})
+    background: '#d62020',
+});
 
 const Box = styled('div', {
     position: 'relative',
-    height: 'calc(14vw * 0.8)',
-    width: 'calc(14vw * 0.8)',
-})
+    height: '13rem',
+    width: '13rem',
+});
 
 const SharedStyles = {
     width: '100%',
@@ -46,7 +46,7 @@ const ImgContainer = styled('div', {
     display: 'flex',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    zIndex: 0
+    zIndex: 0,
 });
 
 const Cover = styled(animated.div, {
@@ -74,8 +74,8 @@ const CoverImg = styled(animated.div, {
     backgroundImage: `url(${require('../../Assets/images/tag.png')})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat'
-})
+    backgroundRepeat: 'no-repeat',
+});
 
 const BoxInsetShadow = styled('div', {
     width: '100%',
@@ -83,16 +83,16 @@ const BoxInsetShadow = styled('div', {
     boxShadow: 'inset 0 0 10px #000000',
     '-moz-box-shadow': 'inset 0 0 10px #000000',
     '-webkit-box-shadow': 'inset 0 0 10px #000000',
-    zIndex: 5
+    zIndex: 5,
 });
 
 const FrontBox = styled('div', {
     ...SharedStyles,
-})
+});
 
 const BackBox = styled(animated.div, {
     ...SharedStyles,
-})
+});
 
 const front = [
     '1.png',
@@ -123,27 +123,23 @@ const front = [
     'Sneak2.png',
     'statue1.png',
     'Whiteangel.png',
-]
+];
 
 enum Directions {
     North,
     East,
     South,
-    West
+    West,
 }
 
-const rotations = [
-    Directions.North,
-    Directions.East,
-    Directions.South,
-    Directions.West
-]
+const rotations = [Directions.North, Directions.East, Directions.South, Directions.West];
 
-function GetRandomNumbersFromImgs(maxNum: number){
+function GetRandomNumbersFromImgs(maxNum: number) {
     const numbers = Array.from({ length: maxNum }, (_, i) => i); // create an array of numbers from 1 to maxNum
     const selectedNumbers = [];
 
-    while (selectedNumbers.length < 6 && numbers.length > 0) { // select 6 unique numbers or until all numbers have been selected
+    while (selectedNumbers.length < 6 && numbers.length > 0) {
+        // select 6 unique numbers or until all numbers have been selected
         const randomIndex = Math.floor(Math.random() * numbers.length);
         const randomNumber = numbers[randomIndex];
         selectedNumbers.push(randomNumber);
@@ -151,8 +147,7 @@ function GetRandomNumbersFromImgs(maxNum: number){
     }
 
     return selectedNumbers;
-  }
-
+}
 
 export default function App() {
     const trailCount = useRef(0);
@@ -165,7 +160,7 @@ export default function App() {
         rotations[Math.floor(Math.random() * rotations.length)],
         rotations[Math.floor(Math.random() * rotations.length)],
         rotations[Math.floor(Math.random() * rotations.length)],
-        rotations[Math.floor(Math.random() * rotations.length)]
+        rotations[Math.floor(Math.random() * rotations.length)],
     ]);
 
     const [trail, api] = useTrail(randomImgNum.length, i => ({
@@ -179,22 +174,22 @@ export default function App() {
         },
         onRest: () => {
             trailCount.current++;
-            if (trailCount.current === randomImgNum.length - 1){
-                if(!isCovered.current){
+            if (trailCount.current === randomImgNum.length - 1) {
+                if (!isCovered.current) {
                     setTimeout(() => {
                         HandleClick();
                     }, 3000);
-                }else{
+                } else {
                     HandleClick();
                 }
             }
         },
     }));
 
-    function HandleClick(){
-        var newRandRots = []
+    function HandleClick() {
+        var newRandRots = [];
         for (let i = 0; i < randoDirs.length; i++) {
-            newRandRots.push(rotations[Math.floor(Math.random() * rotations.length)])
+            newRandRots.push(rotations[Math.floor(Math.random() * rotations.length)]);
         }
         setRandoDirs(newRandRots);
 
@@ -204,24 +199,24 @@ export default function App() {
                 clipPathS: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
                 clipPathE: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
                 clipPathW: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
-                value: 100
-            })
+                value: 100,
+            });
 
             setRandomImgNum(GetRandomNumbersFromImgs(front.length));
-            isCovered.current = false
+            isCovered.current = false;
         } else {
             api.start({
                 clipPathN: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 clipPathS: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 clipPathE: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
                 clipPathW: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                value: 0
-            })
-            isCovered.current = true
+                value: 0,
+            });
+            isCovered.current = true;
         }
     }
 
-    function SetDir (dir: Directions, clipPaths: SpringValue[]) {
+    function SetDir(dir: Directions, clipPaths: SpringValue[]) {
         switch (dir) {
             case Directions.North:
                 return clipPaths[0];
@@ -243,22 +238,32 @@ export default function App() {
 
     return (
         <AppContainer>
-        <Container>
-            {trail.map(({ clipPathN, clipPathS, clipPathE, clipPathW, value }, i) => (
-                <Box key={i}>
-                    <FrontBox key={i+'f'}>
-                        <ImgContainer style={{
-                            backgroundImage: `url(${require('../../Assets/images/profiles/' + front[randomImgNum[i]])})`
-                        }}>
-                            <BoxInsetShadow />
-                            <Cover style={{
-                                clipPath: SetDir(randoDirs[i], [clipPathN, clipPathS, clipPathE, clipPathW]),
-                            }} />
-                        </ ImgContainer>
-                    </FrontBox>
-                </Box>
-            ))}
-        </Container>
+            <Container>
+                {trail.map(({ clipPathN, clipPathS, clipPathE, clipPathW, value }, i) => (
+                    <Box key={i}>
+                        <FrontBox key={i + 'f'}>
+                            <ImgContainer
+                                style={{
+                                    backgroundImage: `url(${require('../../Assets/images/profiles/' +
+                                        front[randomImgNum[i]])})`,
+                                }}
+                            >
+                                <BoxInsetShadow />
+                                <Cover
+                                    style={{
+                                        clipPath: SetDir(randoDirs[i], [
+                                            clipPathN,
+                                            clipPathS,
+                                            clipPathE,
+                                            clipPathW,
+                                        ]),
+                                    }}
+                                />
+                            </ImgContainer>
+                        </FrontBox>
+                    </Box>
+                ))}
+            </Container>
         </AppContainer>
-    )
+    );
 }

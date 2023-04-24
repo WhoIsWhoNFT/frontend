@@ -1,25 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SiTwitter, SiDiscord, SiFacebook, SiTelegram, SiOpensea } from 'react-icons/si';
+import {
+    SiTwitter,
+    SiDiscord,
+    SiFacebook,
+    SiTelegram,
+    SiOpensea,
+    SiInstagram,
+} from 'react-icons/si';
 
 const IconsList = {
-    opensea : {icon: SiOpensea, gradient: '144deg, #2081e2, #15b2e5, 50%,#2bcde4'},
-    twitter : {icon: SiTwitter, gradient: '144deg, #2e00fb, #0043fb, 50%,#3378ef'},
-    discord : {icon: SiDiscord, gradient: '144deg, #AF40FF, #5B42F3, 50%,#db60fd'},
-    facebook: {icon: SiFacebook, gradient: '144deg, #008deb, #0099eb, 50%,#0099eb'},
-    telegram: {icon: SiTelegram, gradient: '144deg, #00DDEB, #00DDEB, 50%,#cbf0f2'},
+    opensea: { icon: SiOpensea, gradient: '144deg, #2081e2, #15b2e5, 50%,#2bcde4' },
+    twitter: { icon: SiTwitter, gradient: '144deg, #2e00fb, #0043fb, 50%,#3378ef' },
+    discord: { icon: SiDiscord, gradient: '144deg, #AF40FF, #5B42F3, 50%,#db60fd' },
+    facebook: { icon: SiFacebook, gradient: '144deg, #008deb, #0099eb, 50%,#0099eb' },
+    telegram: { icon: SiTelegram, gradient: '144deg, #00DDEB, #00DDEB, 50%,#cbf0f2' },
+    instagram: {
+        icon: SiInstagram,
+        gradient: 'to bottom right, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75',
+    },
 };
 
 type IconsListObjectKey = keyof typeof IconsList;
 
-export const Btn = styled.button<{ gradient?: string}>`
+export const Btn = styled.button<{ gradient?: string }>`
     height: 2.8rem;
     width: 2.8rem;
     padding: 0.15rem;
     margin: 0 1rem 0 0;
     display: flex;
     align-items: center;
-    background-image: linear-gradient( ${({gradient}) => gradient ?? '144deg,#AF40FF, #5B42F3, 50%,#00DDEB'});
+    background-image: linear-gradient(
+        ${({ gradient }) => gradient ?? '144deg,#AF40FF, #5B42F3, 50%,#00DDEB'}
+    );
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     border: 0;
     border-radius: 50%;
@@ -50,18 +63,21 @@ export const Btn = styled.button<{ gradient?: string}>`
         background: none;
         padding: 0.4rem 0.5rem;
     }
+`;
 
-`
-
-export const ButtonIcon: React.FC<{ icon: string }> = ({icon}) => {
+export const ButtonIcon: React.FC<{ icon: string; link?: string }> = ({ icon, link }) => {
     const Icon = IconsList[icon as IconsListObjectKey];
-    return(<>
-        <Btn gradient={Icon.gradient}>
-            <span>
-                <Icon.icon size='5rem'/>
-            </span>
-        </Btn>
-    </>)
+    return (
+        <>
+            <a href={link} target="_blank">
+                <Btn gradient={Icon.gradient}>
+                    <span>
+                        <Icon.icon size="5rem" />
+                    </span>
+                </Btn>
+            </a>
+        </>
+    );
 };
 
 export default ButtonIcon;

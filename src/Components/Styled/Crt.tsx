@@ -13,8 +13,8 @@ export const CRT = styled.div`
     background: radial-gradient(#212121 60%, #181818);
     z-index: 1;
 
-    &:before{
-        content: " ";
+    &:before {
+        content: ' ';
         display: block;
         width: 100%;
         height: 100%;
@@ -38,15 +38,15 @@ export const CRT = styled.div`
     @media (max-width: 800px) {
         height: calc(100ch * 0.9);
     }
-`
+`;
 
 export const Terminal = styled.div`
     display: flex;
     justify-content: center;
-`
+`;
 
 export const TerminalContainer = styled.div`
     width: 100%;
     display: content;
     align-items: center;
-`
+`;
