@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { type, clear, pause } from '../Functions/type';
+import { type, clear } from '../Functions/type';
 import { CRT, Terminal, TerminalContainer } from '../Styled';
-import useWalletChecker from '../../Hooks/useWalletChecker';
-import useWeb3 from '../../Store/useWeb3';
+import MerkleTree from 'merkletreejs';
+import { SHA256 } from 'crypto-js';
+import { ethers } from 'ethers';
 
 const AppContainer = styled.div`
     width: 100%;
@@ -31,6 +32,7 @@ const Content = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     flex-flow: column wrap;
     align-items: center;
     padding: 1rem;
@@ -92,17 +94,8 @@ const Header = styled.div`
 `;
 
 export default function App() {
-    const signer = useWeb3(state => state.signer);
-    const isWhitelisted = useWalletChecker();
-    var whitelistResult: string = '';
-
-    if (signer) {
-        whitelistResult = isWhitelisted
-            ? "Congrats you're whitelisted\n"
-            : "Sorry, you're not in the whitelist\n";
-    } else {
-        whitelistResult = 'Please connect wallet\n';
-    }
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [whitelistResult, setWhitelistResult] = useState('');
 
     function ClearContent() {
         const elContent = document.querySelector('#terminalContent');
@@ -112,7 +105,7 @@ export default function App() {
     async function TypeResult() {
         ClearContent();
         const elContent = document.querySelector('#terminalContent');
-        if (signer) {
+        if (inputRef?.current?.value) {
             await type(
                 'LOADING...',
                 {
@@ -148,9 +141,31 @@ export default function App() {
         );
     }
 
-    useEffect(() => {
-        TypeResult();
-    }, [signer]);
+    async function handleCheckWhitelist() {
+        if (!inputRef?.current) return;
+
+        const isValidAddress = ethers.utils.isAddress(
+            String(inputRef.current.value).toLowerCase(),
+        );
+
+        if (!isValidAddress) {
+            setWhitelistResult('Oops! I think you entered an invalid wallet address');
+            return;
+        }
+
+        const response = await fetch('/leaves.json').then(res => res.json());
+        const tree = new MerkleTree(response.leaves, SHA256);
+        const leaf = SHA256(inputRef.current.value.toLowerCase()).toString();
+        const proof = tree.getProof(leaf);
+        const verify = tree.verify(proof, leaf, response.root);
+
+        const resultLabel = verify
+            ? "Congrats you're whitelisted\n"
+            : "Sorry, you're not in the whitelist\n";
+
+        setWhitelistResult(resultLabel);
+        // TypeResult();
+    }
 
     return (
         <AppContainer className="Whitelist">
@@ -162,11 +177,18 @@ export default function App() {
                             <h1>WHITELIST_CHECKER.exe</h1>
                         </Header>
                         <Content>
-                            <IsWhitelistedText>
+                            {/* @todo Please fix terminal typing animation alongside with whitelist input box */}
+                            {/* <IsWhitelistedText>
                                 <Terminal className="terminal">
                                     <TerminalContainer id="terminalContent" />
                                 </Terminal>
-                            </IsWhitelistedText>
+                            </IsWhitelistedText> */}
+
+                            <span>{whitelistResult}</span>
+                            <Input ref={inputRef} />
+                            <MintBtn onClick={() => handleCheckWhitelist()}>
+                                Check
+                            </MintBtn>
                         </Content>
                     </Modal>
                 </Terminal>

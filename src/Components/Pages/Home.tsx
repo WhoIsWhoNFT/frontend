@@ -2,6 +2,10 @@ import { SlideCovers } from '../Animated';
 import { MintButton } from '../Styled';
 import styled from 'styled-components';
 import Countdown from 'react-countdown';
+import { useContractRead } from 'wagmi';
+import collectionConfig from '../../Constants/collection.config';
+import { Networks } from '../Functions/type';
+import { useMemo } from 'react';
 
 type TimerProps = {
     days?: number;
@@ -102,11 +106,27 @@ const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, complet
 };
 
 export default function App() {
+    const contractAddress = collectionConfig[collectionConfig.defaultNetwork as Networks]
+        .address as `0x${string}`;
+
+    const { data: presaleDate } = useContractRead({
+        address: contractAddress,
+        abi: collectionConfig.abi,
+        functionName: 'presaleDate',
+    });
+
+    const presaleDateParsed = useMemo(
+        () => new Date(parseInt(String(presaleDate)) * 1000),
+        [presaleDate],
+    );
+
     return (
         <>
             <div className="Banner">
                 <BannerName>
-                    <Countdown date={Date.now() + 5000000} renderer={Renderer} />
+                    {presaleDate !== undefined && (
+                        <Countdown date={presaleDateParsed} renderer={Renderer} />
+                    )}
                     <BannerLogo
                         src={require('../../Assets/images/main-logo.png')}
                         alt=""
@@ -128,7 +148,7 @@ export default function App() {
             <div className="PrevCollections">
                 <SlideCovers />
             </div>
-            {/* <MintButton /> */}
+            <MintButton />
         </>
     );
 }
