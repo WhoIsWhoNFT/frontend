@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useAccount } from 'wagmi';
 import styled from 'styled-components';
 import collectionConfig from '../../Constants/collection.config';
 import useDynamicContractWrite from '../../Hooks/useDynamicContractWrite';
 import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
+import { getTotalCost } from '../Functions/type';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -83,15 +85,50 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
 `;
 
 const MintButton: React.FC<{}> = () => {
+    const [mintCount, setMintCount] = useState(2);
+    const { address } = useAccount();
+    const baseOverrides = {
+        from: address,
+    };
+
+    // Get and parse current sale stage
     const saleStage = useDynamicContractRead('getSaleStage');
     const stageEnum = collectionConfig.stageEnum;
     const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
 
-    const [mintCount, setMintCount] = useState(2);
+    // Get and calculate presale OG mint cost
+    const presaleOgMintPrice = useDynamicContractRead('PRESALE_PRICE_OG');
+    const presaleOgMintCost = getTotalCost(
+        Number(presaleOgMintPrice.data ?? 0),
+        mintCount,
+    );
 
-    const ogMint = useDynamicContractWrite('ogMint', [mintCount]);
-    const wlMint = useDynamicContractWrite('wlMint', [mintCount]);
-    const publicMint = useDynamicContractWrite('mint', [mintCount]);
+    // Get and calculate presale WL mint cost
+    const presaleWlMintPrice = useDynamicContractRead('PRESALE_PRICE_WL');
+    const presaleWlMintCost = getTotalCost(
+        Number(presaleWlMintPrice.data ?? 0),
+        mintCount,
+    );
+
+    // Get and calculate public mint cost
+    const publicMintPrice = useDynamicContractRead('price');
+    const publicMintCost = getTotalCost(Number(publicMintPrice.data ?? 0), mintCount);
+
+    // Write function initializations
+    const ogMint = useDynamicContractWrite('ogMint', [mintCount, '[]'], {
+        ...baseOverrides,
+        value: presaleOgMintCost,
+    });
+
+    const wlMint = useDynamicContractWrite('wlMint', [mintCount, '[]'], {
+        ...baseOverrides,
+        value: presaleWlMintCost,
+    });
+
+    const publicMint = useDynamicContractWrite('mint', [mintCount], {
+        ...baseOverrides,
+        value: publicMintCost,
+    });
 
     const handleIncrement = () => {
         setMintCount(prevCount => prevCount + 1);
@@ -127,6 +164,7 @@ const MintButton: React.FC<{}> = () => {
                         </GlowWrapper>
                         <InputStyle>
                             <InputMint
+                                readOnly
                                 type="text"
                                 id="fname"
                                 name="fname"

@@ -18,6 +18,7 @@
     "@web3modal/react": "^2.3.6",
     "crypto-js": "^4.1.1",
     "ethers": "5.7.2",
+    "keccak256": "^1.0.6",
     "merkletreejs": "^0.3.9",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",

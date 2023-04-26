@@ -2,10 +2,8 @@ import { SlideCovers } from '../Animated';
 import { MintButton } from '../Styled';
 import styled from 'styled-components';
 import Countdown from 'react-countdown';
-import { useContractRead } from 'wagmi';
-import collectionConfig from '../../Constants/collection.config';
-import { Networks } from '../Functions/type';
-import { useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
+import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
 
 type TimerProps = {
     days?: number;
@@ -106,19 +104,17 @@ const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, complet
 };
 
 export default function App() {
-    const contractAddress = collectionConfig[collectionConfig.defaultNetwork as Networks]
-        .address as `0x${string}`;
+    const supply = useDynamicContractRead('totalSupply');
+    const presaleDate = useDynamicContractRead('presaleDate');
+    const presaleDateParsed = new Date(parseInt(String(presaleDate?.data ?? 0)) * 1000);
 
-    const { data: presaleDate } = useContractRead({
-        address: contractAddress,
-        abi: collectionConfig.abi,
-        functionName: 'presaleDate',
-    });
+    const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);
+    const supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
 
-    const presaleDateParsed = useMemo(
-        () => new Date(parseInt(String(presaleDate)) * 1000),
-        [presaleDate],
-    );
+    useEffect(() => {
+        getRealtimeTotalSupply();
+        return () => clearInterval(supplyInterval);
+    }, [getRealtimeTotalSupply, supplyInterval]);
 
     return (
         <>
@@ -132,7 +128,7 @@ export default function App() {
                         alt=""
                     />
                     <MintInfo>
-                        <div>Supply: 0 / 5000</div>
+                        <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
                         <div>OG x 3</div>
                         <div>WL x 2</div>
                     </MintInfo>

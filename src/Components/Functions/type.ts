@@ -198,4 +198,8 @@ function clear(screen: any = document.querySelector('.terminal')) {
   screen.innerHTML = '';
 }
 
-export { type, clear, pause };
+function getTotalCost(price: number, mintCount: number) {
+  return String(BigInt(String(price)) * BigInt(mintCount));
+}
+
+export { type, clear, pause, getTotalCost };
