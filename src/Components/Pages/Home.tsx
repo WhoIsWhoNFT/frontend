@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Countdown from 'react-countdown';
 import { useCallback, useEffect } from 'react';
 import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
+import collectionConfig from '../../Constants/collection.config';
 
 type TimerProps = {
     days?: number;
@@ -93,7 +94,37 @@ const MintInfoV = styled.div`
     -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
 `;
 
-const Completionist = () => <span>You are good to go!</span>;
+const Completionist = () => {
+    const saleStage = useDynamicContractRead('getSaleStage');
+    const stageEnum = collectionConfig.stageEnum;
+    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+    let phase = '';
+    console.log(currentStage);
+
+    switch (currentStage) {
+        case 'PRESALE_OG':
+            phase = 'OGs are';
+            break;
+
+        case 'PRESALE_WL':
+            phase = 'WLs are';
+            break;
+
+        case 'PUBLIC_SALE':
+            phase = 'PL mint is';
+            break;
+
+        default:
+            phase = 'You are';
+            break;
+    }
+
+    return (
+        <>
+            <Timer className="glow">{phase} good to go!</Timer>
+        </>
+    );
+};
 
 const Renderer: React.FC<TimerProps> = ({
     days,
@@ -168,7 +199,7 @@ export default function App() {
                     {isScreen1150 ? (
                         <>
                             {presaleDate !== undefined && (
-                                <Countdown date={1684454400000} renderer={Renderer} />
+                                <Countdown date={presaleDateParsed} renderer={Renderer} />
                             )}
                         </>
                     ) : (
@@ -183,6 +214,7 @@ export default function App() {
                             <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
+                            <div>PL x 5</div>
                         </MintInfo>
                     ) : (
                         <></>
@@ -199,7 +231,7 @@ export default function App() {
                     ) : (
                         <InfoRight>
                             <Countdown
-                                date={1684454400000}
+                                date={presaleDateParsed}
                                 renderer={({
                                     days,
                                     hours,
@@ -225,6 +257,7 @@ export default function App() {
                                 <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
                                 <div>OG x 3</div>
                                 <div>WL x 2</div>
+                                <div>PL x 5</div>
                             </MintInfoV>
                         </InfoRight>
                     )}

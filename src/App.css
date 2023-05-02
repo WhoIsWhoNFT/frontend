@@ -41,10 +41,12 @@ html {
   /* 3 */
   tab-size: 4;
   /* 3 */
-  font-family: Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   /* 4 */
   -webkit-font-feature-settings: normal;
-          font-feature-settings: normal;
+  font-feature-settings: normal;
   /* 5 */
 }
 
@@ -81,7 +83,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -125,7 +127,8 @@ code,
 kbd,
 samp,
 pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   /* 1 */
   font-size: 1em;
   /* 2 */
@@ -350,7 +353,8 @@ textarea {
 2. Set the default placeholder color to the user's configured gray 400 color.
 */
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
   opacity: 1;
   /* 1 */
   color: #9ca3af;
@@ -370,7 +374,7 @@ Set the default cursor for buttons.
 */
 
 button,
-[role="button"] {
+[role='button'] {
   cursor: pointer;
 }
 
@@ -418,7 +422,9 @@ video {
   display: none;
 }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
   --tw-translate-x: 0;
@@ -428,16 +434,16 @@ video {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -445,24 +451,24 @@ video {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 ::-webkit-backdrop {
@@ -475,16 +481,16 @@ video {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -492,24 +498,24 @@ video {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 ::backdrop {
@@ -522,16 +528,16 @@ video {
   --tw-skew-y: 0;
   --tw-scale-x: 1;
   --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
+  --tw-pan-x: ;
+  --tw-pan-y: ;
+  --tw-pinch-zoom: ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-ring-inset: ;
   --tw-ring-offset-width: 0px;
   --tw-ring-offset-color: #fff;
   --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -539,24 +545,24 @@ video {
   --tw-ring-shadow: 0 0 #0000;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+  --tw-backdrop-blur: ;
+  --tw-backdrop-brightness: ;
+  --tw-backdrop-contrast: ;
+  --tw-backdrop-grayscale: ;
+  --tw-backdrop-hue-rotate: ;
+  --tw-backdrop-invert: ;
+  --tw-backdrop-opacity: ;
+  --tw-backdrop-saturate: ;
+  --tw-backdrop-sepia: ;
 }
 
 @font-face {
@@ -671,7 +677,7 @@ video {
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     -webkit-animation: App-logo-spin infinite 20s linear;
-            animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 20s linear;
   }
 }
 
@@ -712,7 +718,7 @@ button {
   width: 5rem;
   height: 5rem;
   -webkit-clip-path: circle(50% at 50% 50%);
-          clip-path: circle(50% at 50% 50%);
+  clip-path: circle(50% at 50% 50%);
   background-color: #31cd66;
   background-image: url('./Assets/images/logo2.png');
   background-size: 4rem;
@@ -726,7 +732,7 @@ button {
   height: 3rem;
   width: 2rem;
   -webkit-clip-path: polygon(80% 0, 100% 0, 20% 100%, 0% 100%);
-          clip-path: polygon(80% 0, 100% 0, 20% 100%, 0% 100%);
+  clip-path: polygon(80% 0, 100% 0, 20% 100%, 0% 100%);
   background-color: #000000;
   flex: 0 0 40px;
 }
@@ -866,171 +872,171 @@ button {
   background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #ff013c 5%);
   text-shadow: -3px -3px 0px #f8f005, 3px 3px 0px #00e6f6;
   -webkit-clip-path: var(--slice-0);
-          clip-path: var(--slice-0);
+  clip-path: var(--slice-0);
 }
 
 .button-glitch:hover:after {
   -webkit-animation: 1s glitch;
-          animation: 1s glitch;
+  animation: 1s glitch;
   -webkit-animation-timing-function: steps(2, end);
-          animation-timing-function: steps(2, end);
+  animation-timing-function: steps(2, end);
 }
 
 @-webkit-keyframes glitch {
   0% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-20px, -10px);
-            transform: translate(-20px, -10px);
+    transform: translate(-20px, -10px);
   }
 
   10% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(10px, 10px);
-            transform: translate(10px, 10px);
+    transform: translate(10px, 10px);
   }
 
   20% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-10px, 10px);
-            transform: translate(-10px, 10px);
+    transform: translate(-10px, 10px);
   }
 
   30% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(0px, 5px);
-            transform: translate(0px, 5px);
+    transform: translate(0px, 5px);
   }
 
   40% {
     -webkit-clip-path: var(--slice-2);
-            clip-path: var(--slice-2);
+    clip-path: var(--slice-2);
     -webkit-transform: translate(-5px, 0px);
-            transform: translate(-5px, 0px);
+    transform: translate(-5px, 0px);
   }
 
   50% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(5px, 0px);
-            transform: translate(5px, 0px);
+    transform: translate(5px, 0px);
   }
 
   60% {
     -webkit-clip-path: var(--slice-4);
-            clip-path: var(--slice-4);
+    clip-path: var(--slice-4);
     -webkit-transform: translate(5px, 10px);
-            transform: translate(5px, 10px);
+    transform: translate(5px, 10px);
   }
 
   70% {
     -webkit-clip-path: var(--slice-2);
-            clip-path: var(--slice-2);
+    clip-path: var(--slice-2);
     -webkit-transform: translate(-10px, 10px);
-            transform: translate(-10px, 10px);
+    transform: translate(-10px, 10px);
   }
 
   80% {
     -webkit-clip-path: var(--slice-5);
-            clip-path: var(--slice-5);
+    clip-path: var(--slice-5);
     -webkit-transform: translate(20px, -10px);
-            transform: translate(20px, -10px);
+    transform: translate(20px, -10px);
   }
 
   90% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-10px, 0px);
-            transform: translate(-10px, 0px);
+    transform: translate(-10px, 0px);
   }
 
   100% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(0);
-            transform: translate(0);
+    transform: translate(0);
   }
 }
 
 @keyframes glitch {
   0% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-20px, -10px);
-            transform: translate(-20px, -10px);
+    transform: translate(-20px, -10px);
   }
 
   10% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(10px, 10px);
-            transform: translate(10px, 10px);
+    transform: translate(10px, 10px);
   }
 
   20% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-10px, 10px);
-            transform: translate(-10px, 10px);
+    transform: translate(-10px, 10px);
   }
 
   30% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(0px, 5px);
-            transform: translate(0px, 5px);
+    transform: translate(0px, 5px);
   }
 
   40% {
     -webkit-clip-path: var(--slice-2);
-            clip-path: var(--slice-2);
+    clip-path: var(--slice-2);
     -webkit-transform: translate(-5px, 0px);
-            transform: translate(-5px, 0px);
+    transform: translate(-5px, 0px);
   }
 
   50% {
     -webkit-clip-path: var(--slice-3);
-            clip-path: var(--slice-3);
+    clip-path: var(--slice-3);
     -webkit-transform: translate(5px, 0px);
-            transform: translate(5px, 0px);
+    transform: translate(5px, 0px);
   }
 
   60% {
     -webkit-clip-path: var(--slice-4);
-            clip-path: var(--slice-4);
+    clip-path: var(--slice-4);
     -webkit-transform: translate(5px, 10px);
-            transform: translate(5px, 10px);
+    transform: translate(5px, 10px);
   }
 
   70% {
     -webkit-clip-path: var(--slice-2);
-            clip-path: var(--slice-2);
+    clip-path: var(--slice-2);
     -webkit-transform: translate(-10px, 10px);
-            transform: translate(-10px, 10px);
+    transform: translate(-10px, 10px);
   }
 
   80% {
     -webkit-clip-path: var(--slice-5);
-            clip-path: var(--slice-5);
+    clip-path: var(--slice-5);
     -webkit-transform: translate(20px, -10px);
-            transform: translate(20px, -10px);
+    transform: translate(20px, -10px);
   }
 
   90% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(-10px, 0px);
-            transform: translate(-10px, 0px);
+    transform: translate(-10px, 0px);
   }
 
   100% {
     -webkit-clip-path: var(--slice-1);
-            clip-path: var(--slice-1);
+    clip-path: var(--slice-1);
     -webkit-transform: translate(0);
-            transform: translate(0);
+    transform: translate(0);
   }
 }
 
@@ -1121,12 +1127,12 @@ pre {
   background-size: 100% 5px, 5px 100%;
   pointer-events: none;
   -webkit-animation: fadeIn 2s;
-          animation: fadeIn 2s;
+  animation: fadeIn 2s;
 }
 
 #monitor.turn-off #crt:after {
   -webkit-animation: turnOff 0.4s ease-in-out;
-          animation: turnOff 0.4s ease-in-out;
+  animation: turnOff 0.4s ease-in-out;
   /* animation-fill-mode: forwards; */
 }
 
@@ -1177,9 +1183,9 @@ pre {
 .typer.active:after {
   content: '■';
   -webkit-animation: cursor 1s infinite;
-          animation: cursor 1s infinite;
+  animation: cursor 1s infinite;
   -webkit-animation-timing-function: step-end;
-          animation-timing-function: step-end;
+  animation-timing-function: step-end;
   margin-left: 1px;
   line-height: 1rem;
 }
@@ -1216,7 +1222,7 @@ pre {
   word-break: break-word;
   text-transform: uppercase;
   -webkit-animation: textShadow 4s infinite;
-          animation: textShadow 4s infinite;
+  animation: textShadow 4s infinite;
   @media only screen and (max-width: 497px) {
     padding: 0.5rem;
   }
@@ -1237,7 +1243,7 @@ pre {
   bottom: 100%;
   pointer-events: none;
   -webkit-animation: scanline 10s linear infinite;
-          animation: scanline 10s linear infinite;
+  animation: scanline 10s linear infinite;
 }
 
 .roadmapHeader {
@@ -1730,7 +1736,7 @@ pre {
   0% {
     background: #fff !important;
     -webkit-transform: scale(1, 1.3) translate3d(0, 0, 0);
-            transform: scale(1, 1.3) translate3d(0, 0, 0);
+    transform: scale(1, 1.3) translate3d(0, 0, 0);
     -webkit-filter: brightness(1);
     filter: brightness(1);
     opacity: 1;
@@ -1739,7 +1745,7 @@ pre {
   60% {
     background: #fff !important;
     -webkit-transform: scale(1.3, 0.001) translate3d(0, 0, 0);
-            transform: scale(1.3, 0.001) translate3d(0, 0, 0);
+    transform: scale(1.3, 0.001) translate3d(0, 0, 0);
     -webkit-filter: brightness(10);
     filter: brightness(10);
   }
@@ -1747,9 +1753,9 @@ pre {
   100% {
     background: #fff !important;
     -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
     -webkit-transform: scale(0, 0.0001) translate3d(0, 0, 0);
-            transform: scale(0, 0.0001) translate3d(0, 0, 0);
+    transform: scale(0, 0.0001) translate3d(0, 0, 0);
     -webkit-filter: brightness(50);
     filter: brightness(50);
   }
@@ -1759,7 +1765,7 @@ pre {
   0% {
     background: #fff !important;
     -webkit-transform: scale(1, 1.3) translate3d(0, 0, 0);
-            transform: scale(1, 1.3) translate3d(0, 0, 0);
+    transform: scale(1, 1.3) translate3d(0, 0, 0);
     -webkit-filter: brightness(1);
     filter: brightness(1);
     opacity: 1;
@@ -1768,7 +1774,7 @@ pre {
   60% {
     background: #fff !important;
     -webkit-transform: scale(1.3, 0.001) translate3d(0, 0, 0);
-            transform: scale(1.3, 0.001) translate3d(0, 0, 0);
+    transform: scale(1.3, 0.001) translate3d(0, 0, 0);
     -webkit-filter: brightness(10);
     filter: brightness(10);
   }
@@ -1776,9 +1782,9 @@ pre {
   100% {
     background: #fff !important;
     -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
     -webkit-transform: scale(0, 0.0001) translate3d(0, 0, 0);
-            transform: scale(0, 0.0001) translate3d(0, 0, 0);
+    transform: scale(0, 0.0001) translate3d(0, 0, 0);
     -webkit-filter: brightness(50);
     filter: brightness(50);
   }
@@ -1885,31 +1891,31 @@ pre {
 @-webkit-keyframes marquee {
   0% {
     -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+    transform: translate(100%, 0);
   }
 
   100% {
     -webkit-transform: translate(-100%, 0);
-            transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
   }
 }
 
 @keyframes marquee {
   0% {
     -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0);
+    transform: translate(100%, 0);
   }
 
   100% {
     -webkit-transform: translate(-100%, 0);
-            transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
   }
 }
 
 .glow {
   outline: none;
   -webkit-animation: glow 1s ease-in-out infinite alternate;
-          animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
 }
 
 .reflect {
