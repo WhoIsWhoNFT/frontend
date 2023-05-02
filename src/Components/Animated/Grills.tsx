@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { useTrail, animated, useSprings, useSpringRef } from '@react-spring/web';
 
@@ -23,11 +23,17 @@ const GRILLS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export default function App() {
     const isThicc = useRef(false);
+    const [grills, setGrills] = useState(GRILLS);
+    const [isScreen450, setIsScreen450] = useState(false);
 
-    const [springs, api] = useTrail(GRILLS.length, i => ({
+    const [springs, api] = useTrail(grills.length, i => ({
         clipPath: 'polygon(80% 0, 100% 0, 20% 100%, 0% 100%)',
         config: { duration: 100 },
     }));
+
+    const handleResize = () => {
+        setIsScreen450(window.innerWidth < 450);
+    };
 
     const handleClick = () => {
         if (isThicc.current) {
@@ -43,10 +49,27 @@ export default function App() {
         }
     };
 
+    useMemo(() => {
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     useEffect(() => {
         const t = setInterval(() => handleClick(), 1000);
         return () => clearTimeout(t);
     }, []);
+
+    useEffect(() => {
+        if(isScreen450){
+            setGrills([1, 2, 3, 4, 5, 6])
+        }else{
+            setGrills(GRILLS)
+        }
+    }, [isScreen450])
 
     return (
         <>

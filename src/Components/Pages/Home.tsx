@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react';
 import { SlideCovers } from '../Animated';
 import { MintButton } from '../Styled';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ type TimerProps = {
     minutes?: number;
     seconds?: number;
     completed?: boolean;
+    gap?: string;
 };
 
 const BannerName = styled.div`
@@ -31,9 +33,9 @@ const BannerLogo = styled.img`
     display: block;
 `;
 
-const Timer = styled.div`
+const Timer = styled.div<{gap?: string}>`
     display: flex;
-    gap: 1.5vw;
+    gap: ${({ gap }) => gap ?? '1.5vw'};
     font-family: 'digitalNormal';
     font-size: 2vw;
     transform: translateY(1.2vw);
@@ -49,6 +51,10 @@ const TimerFrame = styled.span`
 
     @media (max-width: 720px) {
         font-size: 1rem;
+    }
+
+    @media (max-width: 500px) {
+        font-size: 0.6rem;
     }
 `;
 
@@ -67,12 +73,30 @@ const MintInfo = styled.div`
 
     @media (max-width: 500px) {
         flex-flow: column wrap;
+        gap: unset;
     }
+`;
+
+const InfoRight = styled.div`
+    transform: translateX(30vw);
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1rem;
+`
+
+const MintInfoV = styled.div`
+    display: flex;
+    flex-flow: column wrap;
+    font-size: 1.5vw;
+    font-weight: 1000;
+    font-family: 'Orbitron';
+    -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
+
 `;
 
 const Completionist = () => <span>You are good to go!</span>;
 
-const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, completed }) => {
+const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, completed, gap }) => {
     if (completed) {
         // Render a completed state
         return <Completionist />;
@@ -80,7 +104,7 @@ const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, complet
         // Render a countdown
         return (
             <>
-                <Timer className="glow">
+                <Timer className="glow" gap={gap}>
                     <div>
                         <span>{days}</span>
                         &nbsp;<TimerFrame>Days</TimerFrame>
@@ -111,6 +135,21 @@ export default function App() {
     const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);
     const supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
 
+    const [isScreen1150, setIsScreen1150] = useState(false);
+
+    const handleResize = () => {
+        setIsScreen1150(window.innerWidth < 1150);
+    };
+
+    useMemo(() => {
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [])
+
     useEffect(() => {
         getRealtimeTotalSupply();
         return () => clearInterval(supplyInterval);
@@ -120,18 +159,22 @@ export default function App() {
         <>
             <div className="Banner">
                 <BannerName>
-                    {presaleDate !== undefined && (
-                        <Countdown date={presaleDateParsed} renderer={Renderer} />
-                    )}
+                    { isScreen1150 ? (<>
+                        {presaleDate !== undefined && (
+                            <Countdown date={1684454400000} renderer={Renderer} />
+                        )}
+                    </>) : (<></>)}
                     <BannerLogo
                         src={require('../../Assets/images/main-logo.png')}
                         alt=""
                     />
-                    <MintInfo>
-                        <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
-                        <div>OG x 3</div>
-                        <div>WL x 2</div>
-                    </MintInfo>
+                    { isScreen1150 ? (
+                        <MintInfo>
+                            <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
+                            <div>OG x 3</div>
+                            <div>WL x 2</div>
+                        </MintInfo>
+                    ) : (<></>)}
                 </BannerName>
                 <div className="ImgContainer" style={{ justifyContent: 'left' }}>
                     <img
@@ -139,6 +182,20 @@ export default function App() {
                         src={require('../../Assets/images/blackplasticwho.png')}
                         alt=""
                     />
+                    { isScreen1150 ? (<></>) : (
+                        <InfoRight>
+                            <Countdown date={1684454400000} renderer={({ days, hours, minutes, seconds, completed }) => {
+                                return(<>
+                                    {Renderer({days, hours, minutes, seconds, completed, gap: '0.5rem'})}
+                                </>)
+                            }} />
+                            <MintInfoV>
+                                <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
+                                <div>OG x 3</div>
+                                <div>WL x 2</div>
+                            </MintInfoV>
+                        </InfoRight>
+                    )}
                 </div>
             </div>
             <div className="PrevCollections">
