@@ -774,7 +774,7 @@ button {
 
 .Socials a {
   display: flex;
-  @media (min-width: 1045px){
+  @media (min-width: 1045px) {
     padding-top: 0.2rem;
   }
 }

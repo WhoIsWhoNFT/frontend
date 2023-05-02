@@ -97,7 +97,7 @@ function App() {
     }, []);
 
     const Navigation = () => {
-        return(
+        return (
             <AppNav>
                 <div className="noselect">
                     <span
@@ -137,8 +137,8 @@ function App() {
                     </span>
                 </div>
             </AppNav>
-        )
-    }
+        );
+    };
 
     const Socials = () => {
         return (
@@ -148,11 +148,11 @@ function App() {
                     icon="instagram"
                     link="https://www.instagram.com/whoiswho.crew/"
                 />
-                <ButtonIcon icon="twitter" link='https://twitter.com/whoiswho_crew' />
-                <ButtonIcon icon="discord" link='https://discord.gg/FGmNZCvH6G' />
+                <ButtonIcon icon="twitter" link="https://twitter.com/whoiswho_crew" />
+                <ButtonIcon icon="discord" link="https://discord.gg/FGmNZCvH6G" />
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -163,29 +163,37 @@ function App() {
                             <div className="Shape-circle" />
                             <div className="Header-content">
                                 <HeaderText className="Header-contnet-left">
-                                    { !isScreen764 && Navigation() }
+                                    {!isScreen764 && Navigation()}
                                 </HeaderText>
                                 <div className="Header-content-right">
-                                    { !isScreen1045 && Socials() }
-                                    { !isScreen600 && <Grills /> }
+                                    {!isScreen1045 && Socials()}
+                                    {!isScreen600 && <Grills />}
                                     <ConnectButton />
                                 </div>
                             </div>
                             {isScreen1045 ? (
                                 <MobileHeader>
-                                    {isScreen764 ? ( Navigation() ) : ( <></> )}
-                                    {!isScreen600 ? (Socials()) : (<></>)}
+                                    {isScreen764 ? Navigation() : <></>}
+                                    {!isScreen600 ? Socials() : <></>}
                                 </MobileHeader>
                             ) : (
                                 <></>
                             )}
-                            {isScreen600 && (<>
+                            {isScreen600 && (
                                 <>
-                                    <div style={{width: "100%", marginTop: "1rem", position: "relative"}}>
-                                        {Socials()}
-                                    </div>
+                                    <>
+                                        <div
+                                            style={{
+                                                width: '100%',
+                                                marginTop: '1rem',
+                                                position: 'relative',
+                                            }}
+                                        >
+                                            {Socials()}
+                                        </div>
+                                    </>
                                 </>
-                            </>)}
+                            )}
                         </div>
                     </header>
                     <Container>

@@ -33,7 +33,7 @@ const BannerLogo = styled.img`
     display: block;
 `;
 
-const Timer = styled.div<{gap?: string}>`
+const Timer = styled.div<{ gap?: string }>`
     display: flex;
     gap: ${({ gap }) => gap ?? '1.5vw'};
     font-family: 'digitalNormal';
@@ -82,7 +82,7 @@ const InfoRight = styled.div`
     display: flex;
     flex-flow: column wrap;
     gap: 1rem;
-`
+`;
 
 const MintInfoV = styled.div`
     display: flex;
@@ -91,12 +91,18 @@ const MintInfoV = styled.div`
     font-weight: 1000;
     font-family: 'Orbitron';
     -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
-
 `;
 
 const Completionist = () => <span>You are good to go!</span>;
 
-const Renderer: React.FC<TimerProps> = ({ days, hours, minutes, seconds, completed, gap }) => {
+const Renderer: React.FC<TimerProps> = ({
+    days,
+    hours,
+    minutes,
+    seconds,
+    completed,
+    gap,
+}) => {
     if (completed) {
         // Render a completed state
         return <Completionist />;
@@ -148,7 +154,7 @@ export default function App() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         getRealtimeTotalSupply();
@@ -159,22 +165,28 @@ export default function App() {
         <>
             <div className="Banner">
                 <BannerName>
-                    { isScreen1150 ? (<>
-                        {presaleDate !== undefined && (
-                            <Countdown date={1684454400000} renderer={Renderer} />
-                        )}
-                    </>) : (<></>)}
+                    {isScreen1150 ? (
+                        <>
+                            {presaleDate !== undefined && (
+                                <Countdown date={1684454400000} renderer={Renderer} />
+                            )}
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     <BannerLogo
                         src={require('../../Assets/images/main-logo.png')}
                         alt=""
                     />
-                    { isScreen1150 ? (
+                    {isScreen1150 ? (
                         <MintInfo>
                             <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
                         </MintInfo>
-                    ) : (<></>)}
+                    ) : (
+                        <></>
+                    )}
                 </BannerName>
                 <div className="ImgContainer" style={{ justifyContent: 'left' }}>
                     <img
@@ -182,13 +194,33 @@ export default function App() {
                         src={require('../../Assets/images/blackplasticwho.png')}
                         alt=""
                     />
-                    { isScreen1150 ? (<></>) : (
+                    {isScreen1150 ? (
+                        <></>
+                    ) : (
                         <InfoRight>
-                            <Countdown date={1684454400000} renderer={({ days, hours, minutes, seconds, completed }) => {
-                                return(<>
-                                    {Renderer({days, hours, minutes, seconds, completed, gap: '0.5rem'})}
-                                </>)
-                            }} />
+                            <Countdown
+                                date={1684454400000}
+                                renderer={({
+                                    days,
+                                    hours,
+                                    minutes,
+                                    seconds,
+                                    completed,
+                                }) => {
+                                    return (
+                                        <>
+                                            {Renderer({
+                                                days,
+                                                hours,
+                                                minutes,
+                                                seconds,
+                                                completed,
+                                                gap: '0.5rem',
+                                            })}
+                                        </>
+                                    );
+                                }}
+                            />
                             <MintInfoV>
                                 <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
                                 <div>OG x 3</div>

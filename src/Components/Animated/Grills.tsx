@@ -64,12 +64,12 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        if(isScreen450){
-            setGrills([1, 2, 3, 4, 5, 6])
-        }else{
-            setGrills(GRILLS)
+        if (isScreen450) {
+            setGrills([1, 2, 3, 4, 5, 6]);
+        } else {
+            setGrills(GRILLS);
         }
-    }, [isScreen450])
+    }, [isScreen450]);
 
     return (
         <>

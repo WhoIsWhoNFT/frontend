@@ -27,19 +27,19 @@ const Modal = styled.div`
     position: absolute;
     clip-path: polygon(5% 0%, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%);
 
-    @media (max-width: 950px){
+    @media (max-width: 950px) {
         width: 70%;
         top: 40%;
         transform: translate(-50%, -40%);
     }
 
-    @media (max-width: 675px){
+    @media (max-width: 675px) {
         width: 80%;
         top: 30%;
         transform: translate(-50%, -30%);
     }
 
-    @media (max-width: 405px){
+    @media (max-width: 405px) {
         width: 90%;
         top: 20%;
         transform: translate(-50%, -20%);
@@ -162,7 +162,7 @@ export default function App() {
     async function handleCheckWhitelist() {
         if (!inputRef?.current) return;
 
-        let resultLabel = 'Oops! Invalid wallet address'
+        let resultLabel = 'Oops! Invalid wallet address';
         const isValidAddress = ethers.utils.isAddress(
             String(inputRef.current.value).toLowerCase(),
         );
@@ -206,13 +206,27 @@ export default function App() {
                             <span>{whitelistResult}</span>
                             <Input ref={inputRef} />
 
-                            <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                            <div
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}
+                            >
                                 <MintBtn onClick={() => handleCheckWhitelist()}>
                                     Check
                                 </MintBtn>
                             </div>
 
-                            <Terminal className="terminal" style={{ width: '100%', padding: '0rem', margin: '2rem 0 0 0', textAlign: 'center'}}>
+                            <Terminal
+                                className="terminal"
+                                style={{
+                                    width: '100%',
+                                    padding: '0rem',
+                                    margin: '2rem 0 0 0',
+                                    textAlign: 'center',
+                                }}
+                            >
                                 <TerminalContainer id="terminalContent" />
                             </Terminal>
                         </Content>

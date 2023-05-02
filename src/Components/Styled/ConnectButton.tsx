@@ -35,7 +35,7 @@ function ConnectButton() {
     const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
     const [connecting, setConnecting] = useState(false);
-    const [ animOpen, setAnimOpen ] = useState(false);
+    const [animOpen, setAnimOpen] = useState(false);
     const [style, api] = useSpring(() => ({
         transform: 'translate(36.5%, -100%)',
     }));
@@ -59,20 +59,19 @@ function ConnectButton() {
     };
 
     useEffect(() => {
-        if(isConnected){
+        if (isConnected) {
             api.start({
                 transform: 'translate(36.5%, 0%)',
             });
-        }else{
+        } else {
             api.start({
                 transform: 'translate(36.5%, -100%)',
             });
         }
     }, [isConnected]);
 
-
     return (
-        <div style={{position: 'relative', height: '6rem'}}>
+        <div style={{ position: 'relative', height: '6rem' }}>
             <ButtonGlitch
                 disabled={connecting}
                 signed={isConnected}
