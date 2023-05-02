@@ -148,8 +148,8 @@ function App() {
                     icon="instagram"
                     link="https://www.instagram.com/whoiswho.crew/"
                 />
-                <ButtonIcon icon="twitter" />
-                <ButtonIcon icon="discord" />
+                <ButtonIcon icon="twitter" link='https://twitter.com/whoiswho_crew' />
+                <ButtonIcon icon="discord" link='https://discord.gg/FGmNZCvH6G' />
             </div>
         )
     }
