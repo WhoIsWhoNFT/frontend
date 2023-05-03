@@ -26,14 +26,32 @@ const Modal = styled.div`
     transform: translate(-50%, -50%);
     position: absolute;
     clip-path: polygon(5% 0%, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%);
+
+    @media (max-width: 950px) {
+        width: 70%;
+        top: 40%;
+        transform: translate(-50%, -40%);
+    }
+
+    @media (max-width: 675px) {
+        width: 80%;
+        top: 30%;
+        transform: translate(-50%, -30%);
+    }
+
+    @media (max-width: 405px) {
+        width: 90%;
+        top: 20%;
+        transform: translate(-50%, -20%);
+    }
 `;
 
 const Content = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
+    justify-items: center;
     align-items: center;
     padding: 1rem;
     clip-path: polygon(5% 0%, 100% 0, 100% 90%, 95% 100%, 0 100%, 0 10%);
@@ -44,7 +62,7 @@ const Input = styled.input`
     width: 100%;
     color: #ffffff;
     padding: 0 1rem;
-    margin: 5rem 0 0 0;
+    margin: 2rem 0 0 0;
     border: 0;
     outline: none !important;
     text-align: center;
@@ -102,10 +120,10 @@ export default function App() {
         clear(elContent);
     }
 
-    async function TypeResult() {
+    async function TypeResult(message: string, notValid?: boolean) {
         ClearContent();
         const elContent = document.querySelector('#terminalContent');
-        if (inputRef?.current?.value) {
+        if (inputRef?.current?.value && !notValid) {
             await type(
                 'LOADING...',
                 {
@@ -130,7 +148,7 @@ export default function App() {
             ClearContent();
         }
         await type(
-            whitelistResult,
+            message,
             {
                 wait: 15,
                 initialWait: 0,
@@ -144,12 +162,13 @@ export default function App() {
     async function handleCheckWhitelist() {
         if (!inputRef?.current) return;
 
+        let resultLabel = 'Oops! Invalid wallet address';
         const isValidAddress = ethers.utils.isAddress(
             String(inputRef.current.value).toLowerCase(),
         );
 
         if (!isValidAddress) {
-            setWhitelistResult('Oops! I think you entered an invalid wallet address');
+            TypeResult(resultLabel, true);
             return;
         }
 
@@ -159,12 +178,12 @@ export default function App() {
         const proof = tree.getProof(leaf);
         const verify = tree.verify(proof, leaf, response.root);
 
-        const resultLabel = verify
+        resultLabel = verify
             ? "Congrats you're whitelisted\n"
             : "Sorry, you're not in the whitelist\n";
 
-        setWhitelistResult(resultLabel);
-        // TypeResult();
+        // setWhitelistResult(resultLabel);
+        TypeResult(resultLabel);
     }
 
     return (
@@ -186,9 +205,30 @@ export default function App() {
 
                             <span>{whitelistResult}</span>
                             <Input ref={inputRef} />
-                            <MintBtn onClick={() => handleCheckWhitelist()}>
-                                Check
-                            </MintBtn>
+
+                            <div
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <MintBtn onClick={() => handleCheckWhitelist()}>
+                                    Check
+                                </MintBtn>
+                            </div>
+
+                            <Terminal
+                                className="terminal"
+                                style={{
+                                    width: '100%',
+                                    padding: '0rem',
+                                    margin: '2rem 0 0 0',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <TerminalContainer id="terminalContent" />
+                            </Terminal>
                         </Content>
                     </Modal>
                 </Terminal>
