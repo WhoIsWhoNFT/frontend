@@ -66,7 +66,6 @@ const MintInfo = styled.div`
     font-size: 1.5vw;
     font-weight: 1000;
     font-family: 'Orbitron';
-    -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
 
     @media (max-width: 720px) {
         font-size: 0.8rem;
@@ -91,7 +90,6 @@ const MintInfoV = styled.div`
     font-size: 1.5vw;
     font-weight: 1000;
     font-family: 'Orbitron';
-    -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
 `;
 
 const Completionist = () => {
