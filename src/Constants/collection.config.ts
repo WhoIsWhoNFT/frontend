@@ -2,7 +2,7 @@
 import CollectionAbi from '../Abis/WhoIsWho.json';
 
 export default {
-  defaultNetwork: 'sepolia',
+  defaultNetwork: 'testnet',
   sepolia: {
     address: '0x309368DcEf184Cca595980d7006cE3380891752e',
   },
@@ -11,6 +11,9 @@ export default {
   },
   goerli: {
     address: '',
+  },
+  testnet: {
+    address: '0xd7Fb47bA27407bBBB616ece682f0Fc759F824cDa',
   },
   mainnet: {
     address: '',

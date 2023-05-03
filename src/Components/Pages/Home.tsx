@@ -97,7 +97,6 @@ const Completionist = () => {
     const stageEnum = collectionConfig.stageEnum;
     const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
     let phase = '';
-    console.log(currentStage);
 
     switch (currentStage) {
         case 'PRESALE_OG':

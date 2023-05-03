@@ -95,7 +95,6 @@ const MintButton: React.FC<{}> = () => {
     const saleStage = useDynamicContractRead('getSaleStage');
     const stageEnum = collectionConfig.stageEnum;
     const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
-    console.log(currentStage);
 
     // Get and calculate presale OG mint cost
     const presaleOgMintPrice = useDynamicContractRead('PRESALE_PRICE_OG');
