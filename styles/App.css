@@ -159,8 +159,8 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
-  margin: 0 0 0 7rem;
-  align-items: center;
+  margin: 0 0 0 6rem;
+  align-items: start;
   overflow: hidden;
 }
 
@@ -168,15 +168,29 @@ button {
   width: 100%;
   display: flex;
   justify-content: right;
-  align-items: center;
+  align-items: start;
   padding: 0 1rem 0 0;
 }
 
 .Socials {
   display: flex;
   align-items: center;
-  @media only screen and (max-width: 958px) {
+  z-index: 10;
+
+  @media (max-width: 1045px) {
+    width: 100%;
     justify-content: right;
+  }
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
+}
+
+.Socials a {
+  display: flex;
+  @media (min-width: 1045px) {
+    padding-top: 0.2rem;
   }
 }
 
@@ -197,11 +211,6 @@ button {
   justify-content: center;
   align-items: center;
   grid-template-columns: 1fr 1fr;
-
-  @media only screen and (max-width: 976px) {
-    margin-top: 4rem;
-    /* transform: translateY(4rem); */
-  }
 }
 
 .Banner .ImgContainer {
@@ -816,6 +825,10 @@ pre {
 .glow {
   outline: none;
   animation: glow 1s ease-in-out infinite alternate;
+}
+
+.reflect {
+  -webkit-box-reflect: below -6px linear-gradient(transparent 35%, #0008);
 }
 
 @keyframes glow {

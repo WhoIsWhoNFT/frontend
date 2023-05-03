@@ -6,6 +6,7 @@ export { default as MintButton } from './MintButton';
 export { CRT, Terminal, TerminalContainer } from './Crt';
 
 export const ButtonGlitch = styled.button<{ signed?: any }>`
+    min-width: 7.8rem;
     max-width: 26rem;
     height: 3rem;
     padding: 0 1rem;

@@ -85,7 +85,7 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
 `;
 
 const MintButton: React.FC<{}> = () => {
-    const [mintCount, setMintCount] = useState(2);
+    const [mintCount, setMintCount] = useState(1);
     const { address } = useAccount();
     const baseOverrides = {
         from: address,
@@ -95,6 +95,7 @@ const MintButton: React.FC<{}> = () => {
     const saleStage = useDynamicContractRead('getSaleStage');
     const stageEnum = collectionConfig.stageEnum;
     const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+    console.log(currentStage);
 
     // Get and calculate presale OG mint cost
     const presaleOgMintPrice = useDynamicContractRead('PRESALE_PRICE_OG');
@@ -131,7 +132,27 @@ const MintButton: React.FC<{}> = () => {
     });
 
     const handleIncrement = () => {
-        setMintCount(prevCount => prevCount + 1);
+        let limit = 2;
+        switch (currentStage) {
+            case 'PRESALE_OG':
+                limit = 3;
+                break;
+
+            case 'PRESALE_WL':
+                limit = 2;
+                break;
+
+            case 'PUBLIC_SALE':
+                limit = 5;
+                break;
+
+            default:
+                break;
+        }
+
+        if (mintCount <= limit) {
+            setMintCount(prevCount => prevCount + 1);
+        }
     };
 
     const handleDecrement = () => {

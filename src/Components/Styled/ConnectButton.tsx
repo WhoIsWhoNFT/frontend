@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { ButtonGlitch } from '.';
 import { useState } from 'react';
 import { animated, useSpring } from '@react-spring/web';
@@ -7,7 +7,7 @@ import { useAccount, useDisconnect } from 'wagmi';
 import styled from 'styled-components';
 
 const DisconnectBtn = styled(animated.button)`
-    width: 9.6rem;
+    width: 7.2rem;
     height: 2.5rem;
     display: flex;
     -webkit-box-pack: center;
@@ -17,6 +17,7 @@ const DisconnectBtn = styled(animated.button)`
     position: absolute;
     background-color: #e63525;
     z-index: 3;
+    font-size: 1rem;
     font-family: 'VT323', monospace;
     transform: translate(4%, 100%);
     border-top: 5px solid black;
@@ -34,8 +35,9 @@ function ConnectButton() {
     const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
     const [connecting, setConnecting] = useState(false);
+    const [animOpen, setAnimOpen] = useState(false);
     const [style, api] = useSpring(() => ({
-        transform: 'translate(4%, 0%)',
+        transform: 'translate(36.5%, -100%)',
     }));
 
     const onOpen = async () => {
@@ -46,24 +48,30 @@ function ConnectButton() {
 
     const handleConnect = () => {
         if (!isConnected) {
-            api.start({
-                transform: 'translate(4%, 100%)',
-            });
             onOpen();
         }
     };
 
     const handleDisconnect = () => {
         if (isConnected) {
-            api.start({
-                transform: 'translate(4%, 0%)',
-            });
             disconnect();
         }
     };
 
+    useEffect(() => {
+        if (isConnected) {
+            api.start({
+                transform: 'translate(36.5%, 0%)',
+            });
+        } else {
+            api.start({
+                transform: 'translate(36.5%, -100%)',
+            });
+        }
+    }, [isConnected]);
+
     return (
-        <>
+        <div style={{ position: 'relative', height: '6rem' }}>
             <ButtonGlitch
                 disabled={connecting}
                 signed={isConnected}
@@ -85,12 +93,10 @@ function ConnectButton() {
                     : 'Connect'}
             </ButtonGlitch>
             {/* @todo Disconnect button is missing when page is refreshed */}
-            {isConnected && (
-                <DisconnectBtn style={style} onClick={handleDisconnect}>
-                    <span>Disconnect?</span>
-                </DisconnectBtn>
-            )}
-        </>
+            <DisconnectBtn style={style} onClick={handleDisconnect}>
+                <span>Disconnect?</span>
+            </DisconnectBtn>
+        </div>
     );
 }
 
