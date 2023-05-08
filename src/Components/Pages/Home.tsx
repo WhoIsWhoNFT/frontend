@@ -164,7 +164,10 @@ const Renderer: React.FC<TimerProps> = ({
 export default function App() {
     const supply = useDynamicContractRead('totalSupply');
     const presaleDate = useDynamicContractRead('presaleDate');
-    const presaleDateParsed = new Date(parseInt(String(presaleDate?.data ?? 0)) * 1000);
+    const presaleDateStatic = 1684508400; // May 19, 3:00 PM UTC, May 19, 11:00 PM Manila Time
+    const presaleDateParsed = new Date(
+        parseInt(String(presaleDate?.data ?? presaleDateStatic)) * 1000,
+    );
 
     const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);
     const supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
