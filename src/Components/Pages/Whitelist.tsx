@@ -173,13 +173,26 @@ export default function App() {
         }
 
         const response = await fetch('/leaves.json').then(res => res.json());
-        const tree = new MerkleTree(response.leaves, SHA256);
-        const leaf = SHA256(inputRef.current.value.toLowerCase()).toString();
-        const proof = tree.getProof(leaf);
-        const verify = tree.verify(proof, leaf, response.root);
 
-        resultLabel = verify
-            ? "Congrats you're whitelisted\n"
+        const oglistsTree = new MerkleTree(response.oglists, SHA256);
+        const whitelistsTree = new MerkleTree(response.whitelists, SHA256);
+
+        const leaf = SHA256(inputRef.current.value.toLowerCase()).toString();
+
+        const oglistsProof = oglistsTree.getProof(leaf);
+        const whitelistsProof = whitelistsTree.getProof(leaf);
+
+        const isOg = oglistsTree.verify(oglistsProof, leaf, response.oglistsRoot);
+        const isWhitelist = whitelistsTree.verify(
+            whitelistsProof,
+            leaf,
+            response.whitelistsRoot,
+        );
+
+        resultLabel = isOg
+            ? "Awesome you're an OG !!!"
+            : isWhitelist
+            ? "Congrats you're whitelisted !!!\n"
             : "Sorry, you're not in the whitelist\n";
 
         // setWhitelistResult(resultLabel);

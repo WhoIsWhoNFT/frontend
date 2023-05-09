@@ -1,10 +1,13 @@
 import fs from 'fs';
+import { ethers } from 'ethers';
 
 // npx ts-node scripts/cleanWhitelists.ts
 async function main() {
+  const args = process.argv.slice(2);
+  const filename = args[0];
   const whitelists: string[] = [];
 
-  fs.readFile('whitelists.txt', 'utf8', function (err: unknown, data: string) {
+  fs.readFile(filename, 'utf8', function (err: unknown, data: string) {
     if (err) {
       console.log(err);
     }
@@ -15,14 +18,19 @@ async function main() {
       if (address.trim() !== '') {
         const cleanedAddress = address.trim().toLowerCase();
         const idx = whitelists.findIndex(item => item === cleanedAddress);
+
         if (idx === -1) {
-          whitelists.push(cleanedAddress);
+          if (ethers.utils.isAddress(cleanedAddress)) {
+            whitelists.push(cleanedAddress);
+          } else {
+            console.log(`Invalid address: ${cleanedAddress}`);
+          }
         }
       }
     });
 
     const text = whitelists.join('\n');
-    fs.writeFile('whitelists.txt', text, err => {
+    fs.writeFile(filename, text, err => {
       console.log(err);
     });
   });
