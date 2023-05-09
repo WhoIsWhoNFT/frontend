@@ -25,4 +25,6 @@ yarn-error.log*
 # environment
 .env
 
+# whitelist
 whitelists.txt
+oglists.txt
