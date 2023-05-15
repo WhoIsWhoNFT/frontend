@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 import { type, clear } from '../Functions/type';
 import { CRT, Terminal, TerminalContainer } from '../Styled';
-import MerkleTree from 'merkletreejs';
-import { SHA256 } from 'crypto-js';
 import { ethers } from 'ethers';
+import useMerkleTree from '../../Hooks/useMerkleTree';
+import keccak256 from 'keccak256';
 
 const AppContainer = styled.div`
     width: 100%;
@@ -86,18 +86,6 @@ const MintBtn = styled.button`
     }
 `;
 
-const IsWhitelistedText = styled.div`
-    font-size: 2rem;
-    letter-spacing: 3px;
-    color: white;
-    margin: 5rem auto;
-    text-align: center;
-
-    @media (max-width: 650px) {
-        font-size: 1.2rem;
-    }
-`;
-
 const Header = styled.div`
     width: 100%;
     display: flex;
@@ -113,7 +101,8 @@ const Header = styled.div`
 
 export default function App() {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [whitelistResult, setWhitelistResult] = useState('');
+    const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
+    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
 
     function ClearContent() {
         const elContent = document.querySelector('#terminalContent');
@@ -162,40 +151,40 @@ export default function App() {
     async function handleCheckWhitelist() {
         if (!inputRef?.current) return;
 
-        let resultLabel = 'Oops! Invalid wallet address';
+        let resultLabel = 'Some went wrong please contact WhoIsWho support';
         const isValidAddress = ethers.utils.isAddress(
             String(inputRef.current.value).toLowerCase(),
         );
 
         if (!isValidAddress) {
-            TypeResult(resultLabel, true);
+            TypeResult('Oops! Invalid wallet address', true);
             return;
         }
 
-        const response = await fetch('/leaves.json').then(res => res.json());
+        if (oglistsMerkle?.tree && whitelistsMerkle?.tree) {
+            const leaf = keccak256(inputRef.current.value.trim().toLowerCase());
+            const oglistsProof = oglistsMerkle.tree.getHexProof(leaf);
+            const whitelistsProof = whitelistsMerkle.tree.getHexProof(leaf);
 
-        const oglistsTree = new MerkleTree(response.oglists, SHA256);
-        const whitelistsTree = new MerkleTree(response.whitelists, SHA256);
+            const isOg = oglistsMerkle.tree.verify(
+                oglistsProof,
+                leaf,
+                oglistsMerkle.root,
+            );
 
-        const leaf = SHA256(inputRef.current.value.toLowerCase()).toString();
+            const isWhitelist = whitelistsMerkle.tree.verify(
+                whitelistsProof,
+                leaf,
+                whitelistsMerkle.root,
+            );
 
-        const oglistsProof = oglistsTree.getProof(leaf);
-        const whitelistsProof = whitelistsTree.getProof(leaf);
+            resultLabel = isOg
+                ? "Awesome you're an OG !!!"
+                : isWhitelist
+                ? "Congrats you're whitelisted !!!\n"
+                : "Sorry, you're not in the whitelist\n";
+        }
 
-        const isOg = oglistsTree.verify(oglistsProof, leaf, response.oglistsRoot);
-        const isWhitelist = whitelistsTree.verify(
-            whitelistsProof,
-            leaf,
-            response.whitelistsRoot,
-        );
-
-        resultLabel = isOg
-            ? "Awesome you're an OG !!!"
-            : isWhitelist
-            ? "Congrats you're whitelisted !!!\n"
-            : "Sorry, you're not in the whitelist\n";
-
-        // setWhitelistResult(resultLabel);
         TypeResult(resultLabel);
     }
 
@@ -209,14 +198,6 @@ export default function App() {
                             <h1>WHITELIST_CHECKER.exe</h1>
                         </Header>
                         <Content>
-                            {/* @todo Please fix terminal typing animation alongside with whitelist input box */}
-                            {/* <IsWhitelistedText>
-                                <Terminal className="terminal">
-                                    <TerminalContainer id="terminalContent" />
-                                </Terminal>
-                            </IsWhitelistedText> */}
-
-                            <span>{whitelistResult}</span>
                             <Input ref={inputRef} />
 
                             <div

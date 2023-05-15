@@ -92,10 +92,7 @@ const MintInfoV = styled.div`
     font-family: 'Orbitron';
 `;
 
-const Completionist = () => {
-    const saleStage = useDynamicContractRead('getSaleStage');
-    const stageEnum = collectionConfig.stageEnum;
-    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+const Completionist = ({ currentStage }: { currentStage: string }) => {
     let phase = '';
 
     switch (currentStage) {
@@ -123,17 +120,18 @@ const Completionist = () => {
     );
 };
 
-const Renderer: React.FC<TimerProps> = ({
+const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
     days,
     hours,
     minutes,
     seconds,
     completed,
     gap,
+    currentStage,
 }) => {
     if (completed) {
         // Render a completed state
-        return <Completionist />;
+        return <Completionist currentStage={currentStage} />;
     } else {
         // Render a countdown
         return (
@@ -163,14 +161,23 @@ const Renderer: React.FC<TimerProps> = ({
 
 export default function App() {
     const supply = useDynamicContractRead('totalSupply');
+    const saleStage = useDynamicContractRead('getSaleStage');
     const presaleDate = useDynamicContractRead('presaleDate');
+
     const presaleDateStatic = 1684508400; // May 19, 3:00 PM UTC, May 19, 11:00 PM Manila Time
     const presaleDateParsed = new Date(
         parseInt(String(presaleDate?.data ?? presaleDateStatic)) * 1000,
     );
+    const stageEnum = collectionConfig.stageEnum;
+    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
 
+    // Get total supply in realtime
     const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);
     const supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
+
+    // Get current sale stage in realtime
+    const getRealtimeCurrentStage = useCallback(() => saleStage.refetch(), [saleStage]);
+    const saleStageInterval = setInterval(getRealtimeCurrentStage, 1000);
 
     const [isScreen1150, setIsScreen1150] = useState(false);
 
@@ -189,8 +196,17 @@ export default function App() {
 
     useEffect(() => {
         getRealtimeTotalSupply();
-        return () => clearInterval(supplyInterval);
+        return () => {
+            clearInterval(supplyInterval);
+        };
     }, [getRealtimeTotalSupply, supplyInterval]);
+
+    useEffect(() => {
+        getRealtimeCurrentStage();
+        return () => {
+            clearInterval(saleStageInterval);
+        };
+    }, [getRealtimeCurrentStage, saleStageInterval]);
 
     return (
         <>
@@ -199,7 +215,15 @@ export default function App() {
                     {isScreen1150 ? (
                         <>
                             {presaleDate !== undefined && (
-                                <Countdown date={presaleDateParsed} renderer={Renderer} />
+                                <Countdown
+                                    date={presaleDateParsed}
+                                    renderer={props => (
+                                        <Renderer
+                                            {...props}
+                                            currentStage={currentStage}
+                                        />
+                                    )}
+                                />
                             )}
                         </>
                     ) : (
@@ -248,6 +272,7 @@ export default function App() {
                                                 seconds,
                                                 completed,
                                                 gap: '0.5rem',
+                                                currentStage,
                                             })}
                                         </>
                                     );
@@ -266,7 +291,7 @@ export default function App() {
             <div className="PrevCollections">
                 <SlideCovers />
             </div>
-            <MintButton />
+            <MintButton currentStage={currentStage} />
         </>
     );
 }

@@ -1,11 +1,12 @@
 import fs from 'fs';
 import { MerkleTree } from 'merkletreejs';
-import { SHA256 } from 'crypto-js';
+import keccak256 from 'keccak256';
 
+// npx ts-node scripts/merkleTree.ts
 async function main() {
   fs.readFile('whitelists.txt', 'utf8', function (wlErr: unknown, wlData: string) {
-    let whitelists: string[] = [];
-    let oglists: string[] = [];
+    let whitelists: Buffer[] = [];
+    let oglists: Buffer[] = [];
     let whitelistsRoot = '';
     let oglistsRoot = '';
 
@@ -15,9 +16,9 @@ async function main() {
     const addresses = wlData.split('\n');
     whitelists = addresses
       .filter(x => x.trim() !== '')
-      .map(x => SHA256(x.trim().toLowerCase()).toString());
+      .map(x => keccak256(x.trim().toLowerCase()));
 
-    const tree = new MerkleTree(whitelists, SHA256);
+    const tree = new MerkleTree(whitelists, keccak256, { sortPairs: true });
     whitelistsRoot = tree.getRoot().toString('hex');
 
     fs.readFile('oglists.txt', 'utf8', function (ogErr: unknown, ogData: string) {
@@ -27,9 +28,9 @@ async function main() {
       const addresses = ogData.split('\n');
       oglists = addresses
         .filter(x => x.trim() !== '')
-        .map(x => SHA256(x.trim().toLowerCase()).toString());
+        .map(x => keccak256(x.trim().toLowerCase()));
 
-      const tree = new MerkleTree(oglists, SHA256);
+      const tree = new MerkleTree(oglists, keccak256, { sortPairs: true });
       oglistsRoot = tree.getRoot().toString('hex');
 
       fs.writeFile(
