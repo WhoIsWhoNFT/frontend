@@ -118,7 +118,7 @@ function App() {
                         ROADMAP
                     </span>
                     |
-                    {/* <span
+                    <span
                         onClick={() => {
                             setTab(2);
                         }}
@@ -126,7 +126,7 @@ function App() {
                     >
                         TEAM
                     </span>
-                    | */}
+                    |
                     <span
                         onClick={() => {
                             setTab(3);

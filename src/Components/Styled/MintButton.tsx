@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import styled from 'styled-components';
-import collectionConfig from '../../Constants/collection.config';
 import useDynamicContractWrite from '../../Hooks/useDynamicContractWrite';
 import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
 import { getTotalCost } from '../Functions/type';
+import useMerkleTree from '../../Hooks/useMerkleTree';
+import { getProof } from '../Functions/merkleTree';
+import collectionConfig from '../../Constants/collection.config';
+import { ToastContainer, toast } from 'react-toastify';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -84,17 +87,25 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
         })`};
 `;
 
-const MintButton: React.FC<{}> = () => {
+const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
     const [mintCount, setMintCount] = useState(1);
+
+    const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
+    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
     const { address } = useAccount();
+
     const baseOverrides = {
         from: address,
     };
 
-    // Get and parse current sale stage
-    const saleStage = useDynamicContractRead('getSaleStage');
-    const stageEnum = collectionConfig.stageEnum;
-    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+    const ogProof = getProof(oglistsMerkle?.tree, address as string);
+    const wlProof = getProof(whitelistsMerkle?.tree, address as string);
+
+    // Get user balance
+    const userBalance = useDynamicContractRead('balanceOf', [address]);
+    const userPublicSaleBalance = useDynamicContractRead('getPublicSaleBalance', [
+        address,
+    ]);
 
     // Get and calculate presale OG mint cost
     const presaleOgMintPrice = useDynamicContractRead('PRESALE_PRICE_OG');
@@ -115,12 +126,12 @@ const MintButton: React.FC<{}> = () => {
     const publicMintCost = getTotalCost(Number(publicMintPrice.data ?? 0), mintCount);
 
     // Write function initializations
-    const ogMint = useDynamicContractWrite('ogMint', [mintCount, '[]'], {
+    const ogMint = useDynamicContractWrite('ogMint', [mintCount, ogProof], {
         ...baseOverrides,
         value: presaleOgMintCost,
     });
 
-    const wlMint = useDynamicContractWrite('wlMint', [mintCount, '[]'], {
+    const wlMint = useDynamicContractWrite('wlMint', [mintCount, wlProof], {
         ...baseOverrides,
         value: presaleWlMintCost,
     });
@@ -130,26 +141,42 @@ const MintButton: React.FC<{}> = () => {
         value: publicMintCost,
     });
 
+    // Stage Config
+    const stageConfig: Record<string, { maxMint: number; mint: any }> = {
+        PRESALE_OG: {
+            maxMint: collectionConfig.maxMint.PRESALE_OG,
+            mint: ogMint?.write,
+        },
+        PRESALE_WL: {
+            maxMint: collectionConfig.maxMint.PRESALE_WL,
+            mint: wlMint?.write,
+        },
+        PUBLIC_SALE: {
+            maxMint: collectionConfig.maxMint.PUBLIC_SALE,
+            mint: publicMint?.write,
+        },
+    };
+
     const handleIncrement = () => {
         let limit = 2;
         switch (currentStage) {
             case 'PRESALE_OG':
-                limit = 3;
+                limit = stageConfig.PRESALE_OG.maxMint;
                 break;
 
             case 'PRESALE_WL':
-                limit = 2;
+                limit = stageConfig.PRESALE_WL.maxMint;
                 break;
 
             case 'PUBLIC_SALE':
-                limit = 5;
+                limit = stageConfig.PUBLIC_SALE.maxMint;
                 break;
 
             default:
                 break;
         }
 
-        if (mintCount <= limit) {
+        if (mintCount < limit) {
             setMintCount(prevCount => prevCount + 1);
         }
     };
@@ -161,16 +188,51 @@ const MintButton: React.FC<{}> = () => {
     };
 
     const handleMint = () => {
-        if (currentStage === 'PRESALE_OG') {
-            ogMint?.write?.();
-        } else if (currentStage === 'PRESALE_WL') {
-            wlMint?.write?.();
-        } else if (currentStage === 'PUBLIC_SALE') {
-            publicMint?.write?.();
+        userBalance.refetch();
+        userPublicSaleBalance.refetch();
+
+        if (currentStage in stageConfig) {
+            const { maxMint, mint } = stageConfig[currentStage];
+            const balance =
+                currentStage === 'PUBLIC_SALE'
+                    ? userPublicSaleBalance.data
+                    : userBalance.data;
+
+            if (parseInt(String(balance)) < maxMint) {
+                mint?.();
+            } else {
+                toast('Maximum mint reached', { type: 'error' });
+            }
         }
     };
 
-    return currentStage !== 'IDLE' ? (
+    useEffect(() => {
+        (async function () {
+            let hash = '';
+            let wait: any;
+
+            if (wlMint.data) {
+                hash = wlMint.data?.hash;
+                wait = wlMint.data?.wait;
+            } else if (ogMint.data) {
+                hash = ogMint.data?.hash;
+                wait = ogMint.data?.wait;
+            } else if (publicMint.data) {
+                hash = publicMint.data?.hash;
+                wait = publicMint.data?.wait;
+            }
+
+            if (!hash) return;
+            const message = `Transaction Hash: 0x...${String(hash.slice(-5))}`;
+            toast(message, { type: 'success' });
+            await wait();
+            toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+                type: 'success',
+            });
+        })();
+    }, [ogMint.data, wlMint.data, publicMint.data]);
+
+    return currentStage !== 'IDLE' && currentStage !== undefined ? (
         <>
             <AppContainer>
                 <Container>
@@ -208,6 +270,7 @@ const MintButton: React.FC<{}> = () => {
                     </GlowWrapper>
                 </Container>
             </AppContainer>
+            <ToastContainer theme="dark" />
         </>
     ) : (
         <></>

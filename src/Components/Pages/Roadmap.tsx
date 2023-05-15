@@ -51,7 +51,7 @@ export default function App() {
                 '\tWEBSITE UI/UX DRAFT......................[✓]',
                 '\tWEBSITE DEVELOPMENT......................[✓]',
                 '\tWEBSITE LAUNCH...........................[✓]',
-                '\tMINT [TBA]...............................[ ]',
+                '\tMINT [May 19TH 2023].....................[✓]',
                 '\tREVEAL...................................[ ]',
                 '\tRARE HOLDERS REWARD DROPS [PHYSICAL].....[ ]',
                 '\t3D COMPETITION WITH ETH PRIZES...........[ ]',
