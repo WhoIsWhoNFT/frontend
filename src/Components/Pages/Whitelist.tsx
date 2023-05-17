@@ -195,7 +195,7 @@ export default function App() {
                 <Terminal className="terminal">
                     <Modal>
                         <Header>
-                            <h1>WHITELIST_CHECKER.exe</h1>
+                            <h1>WHOLIST_CHECKER.exe</h1>
                         </Header>
                         <Content>
                             <Input ref={inputRef} />
