@@ -133,7 +133,7 @@ function App() {
                         }}
                         className={tab === 3 ? 'NavBtnA' : 'NavBtn'}
                     >
-                        WHITELIST
+                        WHOLIST
                     </span>
                 </div>
             </AppNav>

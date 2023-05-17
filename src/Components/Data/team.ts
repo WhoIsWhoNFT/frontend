@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 export default [
   {
     name: 'Max Pulso',
@@ -18,21 +19,49 @@ export default [
         color: '#1DA1F2',
       },
     ],
-    pic: '0061.png',
+    pic: '3.png',
   },
   {
     name: 'UTO4KA',
     role: 'Co-Founder',
     css: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
     desc: 'Name:\n> UTO4KA\nRole:\n> Co-Founder\nDescription:\n> Co-Founder of Who is Who',
-    pic: '0057.png',
+    pic: '0029.png',
   },
   {
     name: 'Shakewell',
     role: 'Co-Founder',
     css: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
     desc: 'Name:\n> Shakewell\nRole:\n> Co-Founder\nDescription:\n> Co-Founder of Who is Who',
-    pic: '0105.png',
+    pic: '0003.png',
+  },
+  {
+    name: 'JustSlapz',
+    role: 'Community Manager',
+    css: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+    desc: 'Name:\n> JustSlapz\nRole:\n> Community Manager\nDescription:\n> Community Manager of Who is Who',
+    pic: '0022.png',
+    socials: [
+      {
+        name: 'twitter',
+        link: 'https://twitter.com/JSlapz',
+        color: '#1DA1F2',
+      },
+    ],
+  },
+  {
+    name: 'p1zzaboy',
+    role: 'Collab Head',
+    css: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+    desc: 'Name:\n> p1zzaboy\nRole:\n> Collab Head\nDescription:\n> Collab Head of Who is Who',
+    pic: '0031.png',
+    socials: [
+      {
+        name: 'twitter',
+        link: 'https://twitter.com/p1zzab0y_',
+        color: '#1DA1F2',
+      },
+    ],
   },
   {
     name: 'Julz',
@@ -53,7 +82,7 @@ export default [
         color: '#1DA1F2',
       },
     ],
-    pic: '4.png',
+    pic: '0020.png',
   },
   {
     name: 'Jambs',
