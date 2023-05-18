@@ -13,7 +13,7 @@ export default {
     address: '',
   },
   testnet: {
-    address: '0x23401fc7d27b85965D01C16499a6533ee1b16C65',
+    address: '0xd6E493E24C8E3dA49106f15beb268b9b0fdFf7B6',
   },
   mainnet: {
     address: '',
@@ -29,5 +29,6 @@ export default {
     PRESALE_OG: 3,
     PRESALE_WL: 2,
     PUBLIC_SALE: 5,
+    IDLE: 0,
   },
 };

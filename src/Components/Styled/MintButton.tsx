@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { waitForTransaction } from 'wagmi/actions';
 import styled from 'styled-components';
 import useDynamicContractWrite from '../../Hooks/useDynamicContractWrite';
 import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
-import { getTotalCost } from '../Functions/type';
+import { SaleStage, getTotalCost } from '../Functions/type';
 import useMerkleTree from '../../Hooks/useMerkleTree';
 import { getProof } from '../Functions/merkleTree';
 import collectionConfig from '../../Constants/collection.config';
 import { ToastContainer, toast } from 'react-toastify';
+import keccak256 from 'keccak256';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -87,25 +89,17 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
         })`};
 `;
 
-const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
-    const [mintCount, setMintCount] = useState(1);
-
+const OgMintButton = ({ mintCount }: { mintCount: number }) => {
     const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
-    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
     const { address } = useAccount();
-
     const baseOverrides = {
         from: address,
     };
 
     const ogProof = getProof(oglistsMerkle?.tree, address as string);
-    const wlProof = getProof(whitelistsMerkle?.tree, address as string);
 
     // Get user balance
-    const userBalance = useDynamicContractRead('balanceOf', [address]);
-    const userPublicSaleBalance = useDynamicContractRead('getPublicSaleBalance', [
-        address,
-    ]);
+    const userPresaleBalance = useDynamicContractRead('balanceOf', [address]);
 
     // Get and calculate presale OG mint cost
     const presaleOgMintPrice = useDynamicContractRead('PRESALE_PRICE_OG');
@@ -114,6 +108,81 @@ const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
         mintCount,
     );
 
+    // Write function initializations
+    const ogMint = useDynamicContractWrite('ogMint', [mintCount, ogProof], {
+        ...baseOverrides,
+        value: presaleOgMintCost,
+    });
+
+    const mintLimit = () => {
+        return collectionConfig.maxMint.PRESALE_OG;
+    };
+
+    const handleMint = () => {
+        userPresaleBalance.refetch();
+        const balance = userPresaleBalance.data;
+
+        if (parseInt(String(balance), 10) + mintCount > mintLimit()) {
+            toast('Maximum mint reached', { type: 'error' });
+            return;
+        }
+
+        ogMint.write?.();
+    };
+
+    useEffect(() => {
+        (async function () {
+            let hash: `0x${string}` = '0x';
+
+            if (ogMint.data) {
+                hash = ogMint.data?.hash;
+            }
+
+            if (hash === '0x' || hash === undefined) return;
+            const message = `Transaction Hash: 0x...${String(hash.slice(-5))}`;
+            toast(message, { type: 'success' });
+
+            try {
+                await waitForTransaction({ hash });
+                toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+                    type: 'success',
+                });
+            } catch (error) {
+                console.error(error);
+                toast(`There is an error minting your WhoIsWho NFT`, {
+                    type: 'error',
+                });
+            }
+        })();
+    }, [ogMint.data]);
+
+    useEffect(() => {
+        if (ogMint.isError) {
+            toast(ogMint.error?.message, {
+                type: 'error',
+            });
+        }
+    }, [ogMint.error?.message, ogMint.isError]);
+
+    return (
+        <MintBtn onClick={handleMint}>
+            <span>MINT</span>
+        </MintBtn>
+    );
+};
+
+const WlMintButton = ({ mintCount }: { mintCount: number }) => {
+    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
+    const { address } = useAccount();
+    const baseOverrides = {
+        from: address,
+    };
+
+    const wlProof = getProof(whitelistsMerkle?.tree, address as string);
+
+    // Get user balance
+    const userPresaleBalance = useDynamicContractRead('balanceOf', [address]);
+
     // Get and calculate presale WL mint cost
     const presaleWlMintPrice = useDynamicContractRead('PRESALE_PRICE_WL');
     const presaleWlMintCost = getTotalCost(
@@ -121,62 +190,189 @@ const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
         mintCount,
     );
 
-    // Get and calculate public mint cost
-    const publicMintPrice = useDynamicContractRead('price');
-    const publicMintCost = getTotalCost(Number(publicMintPrice.data ?? 0), mintCount);
-
     // Write function initializations
-    const ogMint = useDynamicContractWrite('ogMint', [mintCount, ogProof], {
-        ...baseOverrides,
-        value: presaleOgMintCost,
-    });
-
     const wlMint = useDynamicContractWrite('wlMint', [mintCount, wlProof], {
         ...baseOverrides,
         value: presaleWlMintCost,
     });
+
+    const mintLimit = () => {
+        return collectionConfig.maxMint.PRESALE_WL;
+    };
+
+    const handleMint = () => {
+        userPresaleBalance.refetch();
+        const balance = userPresaleBalance.data;
+
+        if (parseInt(String(balance), 10) + mintCount > mintLimit()) {
+            toast('Maximum mint reached', { type: 'error' });
+            return;
+        }
+
+        wlMint.write?.();
+    };
+
+    useEffect(() => {
+        (async function () {
+            let hash: `0x${string}` = '0x';
+
+            if (wlMint.data) {
+                hash = wlMint.data?.hash;
+            }
+
+            if (hash === '0x' || hash === undefined) return;
+            const message = `Transaction Hash: 0x...${String(hash.slice(-5))}`;
+            toast(message, { type: 'success' });
+
+            try {
+                await waitForTransaction({ hash });
+                toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+                    type: 'success',
+                });
+            } catch (error) {
+                console.error(error);
+                toast(`There is an error minting your WhoIsWho NFT`, {
+                    type: 'error',
+                });
+            }
+        })();
+    }, [wlMint.data]);
+
+    useEffect(() => {
+        if (wlMint.isError) {
+            toast(wlMint.error?.message, {
+                type: 'error',
+            });
+        }
+    }, [wlMint.error?.message, wlMint.isError]);
+
+    return (
+        <MintBtn onClick={handleMint}>
+            <span>MINT</span>
+        </MintBtn>
+    );
+};
+
+const PublicMint = ({ mintCount }: { mintCount: number }) => {
+    const { address } = useAccount();
+    const baseOverrides = {
+        from: address,
+    };
+
+    const userPublicSaleBalance = useDynamicContractRead('getPublicSaleBalance', [
+        address,
+    ]);
+
+    // Get and calculate public mint cost
+    const publicMintPrice = useDynamicContractRead('PUBLIC_SALE_PRICE');
+    const publicMintCost = getTotalCost(Number(publicMintPrice.data ?? 0), mintCount);
 
     const publicMint = useDynamicContractWrite('mint', [mintCount], {
         ...baseOverrides,
         value: publicMintCost,
     });
 
-    // Stage Config
-    const stageConfig: Record<string, { maxMint: number; mint: any }> = {
-        PRESALE_OG: {
-            maxMint: collectionConfig.maxMint.PRESALE_OG,
-            mint: ogMint?.write,
-        },
-        PRESALE_WL: {
-            maxMint: collectionConfig.maxMint.PRESALE_WL,
-            mint: wlMint?.write,
-        },
-        PUBLIC_SALE: {
-            maxMint: collectionConfig.maxMint.PUBLIC_SALE,
-            mint: publicMint?.write,
-        },
+    const mintLimit = () => {
+        return collectionConfig.maxMint.PUBLIC_SALE;
+    };
+
+    const handleMint = () => {
+        userPublicSaleBalance.refetch();
+        const balance = userPublicSaleBalance.data;
+
+        if (parseInt(String(balance), 10) + mintCount > mintLimit()) {
+            toast('Maximum mint reached', { type: 'error' });
+            return;
+        }
+
+        publicMint.write?.();
+    };
+
+    useEffect(() => {
+        (async function () {
+            let hash: `0x${string}` = '0x';
+
+            if (publicMint.data) {
+                hash = publicMint.data?.hash;
+            }
+
+            if (hash === '0x' || hash === undefined) return;
+            const message = `Transaction Hash: 0x...${String(hash.slice(-5))}`;
+            toast(message, { type: 'success' });
+
+            try {
+                await waitForTransaction({ hash });
+                toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+                    type: 'success',
+                });
+            } catch (error) {
+                console.error(error);
+                toast(`There is an error minting your WhoIsWho NFT`, {
+                    type: 'error',
+                });
+            }
+        })();
+    }, [publicMint.data]);
+
+    useEffect(() => {
+        if (publicMint.isError) {
+            toast(publicMint.error?.message, {
+                type: 'error',
+            });
+        }
+    }, [publicMint.error?.message, publicMint.isError]);
+
+    return (
+        <MintBtn onClick={handleMint}>
+            <span>MINT</span>
+        </MintBtn>
+    );
+};
+
+const MintButton: React.FC<{ currentStage: SaleStage }> = ({ currentStage }) => {
+    const [mintCount, setMintCount] = useState(1);
+    const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
+    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
+    const { address } = useAccount();
+
+    const checkWhitelist = () => {
+        if (!(oglistsMerkle?.tree && whitelistsMerkle?.tree && address)) {
+            return '';
+        }
+
+        const leaf = keccak256(address.trim().toLowerCase());
+        const oglistsProof = oglistsMerkle.tree.getHexProof(leaf);
+        const whitelistsProof = whitelistsMerkle.tree.getHexProof(leaf);
+        const isOg = oglistsMerkle.tree.verify(oglistsProof, leaf, oglistsMerkle.root);
+        const isWhitelist = whitelistsMerkle.tree.verify(
+            whitelistsProof,
+            leaf,
+            whitelistsMerkle.root,
+        );
+
+        return isOg ? 'OG' : isWhitelist ? 'WL' : '';
+    };
+
+    const whitelistType = checkWhitelist();
+
+    const mintLimit = () => {
+        if (currentStage === 'PRESALE_OG') {
+            return collectionConfig.maxMint.PRESALE_OG;
+        } else if (currentStage === 'PRESALE_WL') {
+            if (whitelistType === 'OG') {
+                return collectionConfig.maxMint.PRESALE_OG;
+            } else if (whitelistType === 'WL') {
+                return collectionConfig.maxMint.PRESALE_WL;
+            }
+        } else if (currentStage === 'PUBLIC_SALE') {
+            return collectionConfig.maxMint.PUBLIC_SALE;
+        }
+
+        return 2;
     };
 
     const handleIncrement = () => {
-        let limit = 2;
-        switch (currentStage) {
-            case 'PRESALE_OG':
-                limit = stageConfig.PRESALE_OG.maxMint;
-                break;
-
-            case 'PRESALE_WL':
-                limit = stageConfig.PRESALE_WL.maxMint;
-                break;
-
-            case 'PUBLIC_SALE':
-                limit = stageConfig.PUBLIC_SALE.maxMint;
-                break;
-
-            default:
-                break;
-        }
-
-        if (mintCount < limit) {
+        if (mintCount < mintLimit()) {
             setMintCount(prevCount => prevCount + 1);
         }
     };
@@ -187,50 +383,20 @@ const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
         }
     };
 
-    const handleMint = () => {
-        userBalance.refetch();
-        userPublicSaleBalance.refetch();
-
-        if (currentStage in stageConfig) {
-            const { maxMint, mint } = stageConfig[currentStage];
-            const balance =
-                currentStage === 'PUBLIC_SALE'
-                    ? userPublicSaleBalance.data
-                    : userBalance.data;
-
-            if (parseInt(String(balance)) < maxMint) {
-                mint?.();
-            } else {
-                toast('Maximum mint reached', { type: 'error' });
+    const renderMintButton = () => {
+        if (currentStage === 'PRESALE_OG') {
+            return <OgMintButton mintCount={mintCount} />;
+        } else if (currentStage === 'PRESALE_WL') {
+            if (whitelistType === 'OG') {
+                return <OgMintButton mintCount={mintCount} />;
+            } else if (whitelistType === 'WL') {
+                return <WlMintButton mintCount={mintCount} />;
             }
+        } else if (currentStage === 'PUBLIC_SALE') {
+            return <PublicMint mintCount={mintCount} />;
         }
+        return <></>;
     };
-
-    useEffect(() => {
-        (async function () {
-            let hash = '';
-            let wait: any;
-
-            if (wlMint.data) {
-                hash = wlMint.data?.hash;
-                wait = wlMint.data?.wait;
-            } else if (ogMint.data) {
-                hash = ogMint.data?.hash;
-                wait = ogMint.data?.wait;
-            } else if (publicMint.data) {
-                hash = publicMint.data?.hash;
-                wait = publicMint.data?.wait;
-            }
-
-            if (!hash) return;
-            const message = `Transaction Hash: 0x...${String(hash.slice(-5))}`;
-            toast(message, { type: 'success' });
-            await wait();
-            toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
-                type: 'success',
-            });
-        })();
-    }, [ogMint.data, wlMint.data, publicMint.data]);
 
     return currentStage !== 'IDLE' && currentStage !== undefined ? (
         <>
@@ -264,9 +430,7 @@ const MintButton: React.FC<{ currentStage: string }> = ({ currentStage }) => {
                 </Container>
                 <Container>
                     <GlowWrapper color1="#00d5ff" color2="#0053fa">
-                        <MintBtn onClick={handleMint}>
-                            <span>MINT</span>
-                        </MintBtn>
+                        {renderMintButton()}
                     </GlowWrapper>
                 </Container>
             </AppContainer>
