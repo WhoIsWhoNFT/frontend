@@ -6,6 +6,7 @@ import Countdown from 'react-countdown';
 import { useCallback, useEffect } from 'react';
 import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
 import collectionConfig from '../../Constants/collection.config';
+import { SaleStage } from '../Functions/type';
 
 type TimerProps = {
     days?: number;
@@ -162,14 +163,14 @@ const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
 export default function App() {
     const supply = useDynamicContractRead('totalSupply');
     const saleStage = useDynamicContractRead('getSaleStage');
-    const presaleDate = useDynamicContractRead('presaleDate');
+    const presaleDate = useDynamicContractRead('PRESALE_DATE');
 
     const presaleDateStatic = 1684508400; // May 19, 3:00 PM UTC, May 19, 11:00 PM Manila Time
     const presaleDateParsed = new Date(
         parseInt(String(presaleDate?.data ?? presaleDateStatic)) * 1000,
     );
     const stageEnum = collectionConfig.stageEnum;
-    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum];
+    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum] as SaleStage;
 
     // Get total supply in realtime
     const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);

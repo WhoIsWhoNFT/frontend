@@ -13,6 +13,8 @@ interface TypeProps {
 
 export type Networks = 'localhost' | 'sepolia' | 'goerli' | 'mainnet';
 
+export type SaleStage = 'PRESALE_OG' | 'PRESALE_WL' | 'PUBLIC_SALE' | 'IDLE';
+
 function pause(s = 1) {
   return new Promise(resolve => setTimeout(resolve, 1000 * Number(s)));
 }

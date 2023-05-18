@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ButtonIcon } from './Components/Styled';
 import { Grills } from './Components/Animated';
 import { Home, Roadmap, Team, Whitelist } from './Components/Pages';
@@ -9,7 +9,6 @@ import { Web3Modal } from '@web3modal/react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { hardhat, mainnet, sepolia, bscTestnet } from 'wagmi/chains';
 import ConnectButton from './Components/Styled/ConnectButton';
-import { marginTop } from 'styled-system';
 
 const chains = [mainnet, sepolia, hardhat, bscTestnet];
 const projectId = process.env.REACT_APP_WC_PROJECT_ID as string;
