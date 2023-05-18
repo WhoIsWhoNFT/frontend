@@ -151,7 +151,7 @@ export default function App() {
     async function handleCheckWhitelist() {
         if (!inputRef?.current) return;
 
-        let resultLabel = 'Some went wrong please contact WhoIsWho support';
+        let resultLabel = 'Something went wrong please contact WhoIsWho support';
         const isValidAddress = ethers.utils.isAddress(
             String(inputRef.current.value).toLowerCase(),
         );
