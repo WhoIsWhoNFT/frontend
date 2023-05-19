@@ -106,7 +106,7 @@ const Completionist = ({ currentStage }: { currentStage: string }) => {
             break;
 
         case 'PUBLIC_SALE':
-            phase = 'PL mint is';
+            phase = 'WLs are';
             break;
 
         default:
