@@ -35,7 +35,6 @@ function ConnectButton() {
     const { isConnected, address } = useAccount();
     const { disconnect } = useDisconnect();
     const [connecting, setConnecting] = useState(false);
-    const [animOpen, setAnimOpen] = useState(false);
     const [style, api] = useSpring(() => ({
         transform: 'translate(36.5%, -100%)',
     }));
@@ -68,7 +67,7 @@ function ConnectButton() {
                 transform: 'translate(36.5%, -100%)',
             });
         }
-    }, [isConnected]);
+    }, [api, isConnected]);
 
     return (
         <div style={{ position: 'relative', height: '6rem' }}>
@@ -92,7 +91,6 @@ function ConnectButton() {
                     ? `0x...${address?.slice(-4)}`
                     : 'Connect'}
             </ButtonGlitch>
-            {/* @todo Disconnect button is missing when page is refreshed */}
             <DisconnectBtn style={style} onClick={handleDisconnect}>
                 <span>Disconnect?</span>
             </DisconnectBtn>

@@ -236,7 +236,11 @@ export default function App() {
                     />
                     {isScreen1150 ? (
                         <MintInfo>
-                            <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
+                            <div>
+                                {`Supply: ${
+                                    parseInt(String(supply?.data ?? 0), 10) - 1
+                                } / 5000`}
+                            </div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
                             <div>PL x 5</div>
@@ -280,7 +284,9 @@ export default function App() {
                                 }}
                             />
                             <MintInfoV>
-                                <div>{`Supply: ${supply?.data ?? 0} / 5000`}</div>
+                                <div>{`Supply: ${
+                                    parseInt(String(supply?.data ?? 0), 10) - 1
+                                } / 5000`}</div>{' '}
                                 <div>OG x 3</div>
                                 <div>WL x 2</div>
                                 <div>PL x 5</div>

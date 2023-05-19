@@ -9,7 +9,7 @@ import useMerkleTree from '../../Hooks/useMerkleTree';
 import { getProof } from '../Functions/merkleTree';
 import collectionConfig from '../../Constants/collection.config';
 import { ToastContainer, toast } from 'react-toastify';
-import keccak256 from 'keccak256';
+import useWhitelists from '../../Hooks/useWhitelists';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -89,7 +89,13 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
         })`};
 `;
 
-const OgMintButton = ({ mintCount }: { mintCount: number }) => {
+const OgMintButton = ({
+    mintCount,
+    whitelistType,
+}: {
+    mintCount: number;
+    whitelistType: 'OG' | 'WL' | '';
+}) => {
     const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
     const { address } = useAccount();
     const baseOverrides = {
@@ -119,6 +125,11 @@ const OgMintButton = ({ mintCount }: { mintCount: number }) => {
     };
 
     const handleMint = () => {
+        if (whitelistType !== 'OG') {
+            toast("Sorry you're not an OG", { type: 'error' });
+            return;
+        }
+
         userPresaleBalance.refetch();
         const balance = userPresaleBalance.data;
 
@@ -171,7 +182,13 @@ const OgMintButton = ({ mintCount }: { mintCount: number }) => {
     );
 };
 
-const WlMintButton = ({ mintCount }: { mintCount: number }) => {
+const WlMintButton = ({
+    mintCount,
+    whitelistType,
+}: {
+    mintCount: number;
+    whitelistType: 'OG' | 'WL' | '';
+}) => {
     const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
     const { address } = useAccount();
     const baseOverrides = {
@@ -201,6 +218,11 @@ const WlMintButton = ({ mintCount }: { mintCount: number }) => {
     };
 
     const handleMint = () => {
+        if (whitelistType !== 'WL') {
+            toast("Sorry you're not whitelisted", { type: 'error' });
+            return;
+        }
+
         userPresaleBalance.refetch();
         const balance = userPresaleBalance.data;
 
@@ -331,29 +353,7 @@ const PublicMint = ({ mintCount }: { mintCount: number }) => {
 
 const MintButton: React.FC<{ currentStage: SaleStage }> = ({ currentStage }) => {
     const [mintCount, setMintCount] = useState(1);
-    const oglistsMerkle = useMerkleTree({ leaf: 'oglists' });
-    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
-    const { address } = useAccount();
-
-    const checkWhitelist = () => {
-        if (!(oglistsMerkle?.tree && whitelistsMerkle?.tree && address)) {
-            return '';
-        }
-
-        const leaf = keccak256(address.trim().toLowerCase());
-        const oglistsProof = oglistsMerkle.tree.getHexProof(leaf);
-        const whitelistsProof = whitelistsMerkle.tree.getHexProof(leaf);
-        const isOg = oglistsMerkle.tree.verify(oglistsProof, leaf, oglistsMerkle.root);
-        const isWhitelist = whitelistsMerkle.tree.verify(
-            whitelistsProof,
-            leaf,
-            whitelistsMerkle.root,
-        );
-
-        return isOg ? 'OG' : isWhitelist ? 'WL' : '';
-    };
-
-    const whitelistType = checkWhitelist();
+    const whitelistType = useWhitelists();
 
     const mintLimit = () => {
         if (currentStage === 'PRESALE_OG') {
@@ -385,12 +385,16 @@ const MintButton: React.FC<{ currentStage: SaleStage }> = ({ currentStage }) => 
 
     const renderMintButton = () => {
         if (currentStage === 'PRESALE_OG') {
-            return <OgMintButton mintCount={mintCount} />;
+            return <OgMintButton mintCount={mintCount} whitelistType={whitelistType} />;
         } else if (currentStage === 'PRESALE_WL') {
             if (whitelistType === 'OG') {
-                return <OgMintButton mintCount={mintCount} />;
-            } else if (whitelistType === 'WL') {
-                return <WlMintButton mintCount={mintCount} />;
+                return (
+                    <OgMintButton mintCount={mintCount} whitelistType={whitelistType} />
+                );
+            } else {
+                return (
+                    <WlMintButton mintCount={mintCount} whitelistType={whitelistType} />
+                );
             }
         } else if (currentStage === 'PUBLIC_SALE') {
             return <PublicMint mintCount={mintCount} />;

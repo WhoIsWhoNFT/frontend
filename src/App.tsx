@@ -7,10 +7,10 @@ import styled from 'styled-components';
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { hardhat, mainnet, sepolia, bscTestnet } from 'wagmi/chains';
+import { mainnet, sepolia, bscTestnet } from 'wagmi/chains';
 import ConnectButton from './Components/Styled/ConnectButton';
 
-const chains = [mainnet, sepolia, hardhat, bscTestnet];
+const chains = [mainnet, sepolia, bscTestnet];
 const projectId = process.env.REACT_APP_WC_PROJECT_ID as string;
 const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
 

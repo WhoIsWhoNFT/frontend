@@ -2,21 +2,21 @@
 import CollectionAbi from '../Abis/WhoIsWho.json';
 
 export default {
-  defaultNetwork: 'testnet',
+  defaultNetwork: 'mainnet',
   sepolia: {
-    address: '0x309368DcEf184Cca595980d7006cE3380891752e',
+    address: '',
   },
   localhost: {
-    address: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+    address: '',
   },
   goerli: {
     address: '',
   },
   testnet: {
-    address: '0xd6E493E24C8E3dA49106f15beb268b9b0fdFf7B6',
+    address: '',
   },
   mainnet: {
-    address: '',
+    address: '0x8F07AB2B4fEA713c110E820CFA5d8fE02dAa3D74',
   },
   abi: CollectionAbi.abi,
   stageEnum: {
