@@ -114,11 +114,7 @@ const Completionist = ({ currentStage }: { currentStage: string }) => {
             break;
     }
 
-    return (
-        <>
-            <Timer className="glow">{phase} good to go!</Timer>
-        </>
-    );
+    return <>{/* <Timer className="glow">{phase} good to go!</Timer> */}</>;
 };
 
 const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
@@ -236,14 +232,14 @@ export default function App() {
                     />
                     {isScreen1150 ? (
                         <MintInfo>
-                            <div>
+                            {/* <div>
                                 {`Supply: ${
                                     parseInt(String(supply?.data ?? 0), 10) - 1
                                 } / 5000`}
                             </div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
-                            <div>PL x 5</div>
+                            <div>PL x 5</div> */}
                         </MintInfo>
                     ) : (
                         <></>
@@ -284,12 +280,12 @@ export default function App() {
                                 }}
                             />
                             <MintInfoV>
-                                <div>{`Supply: ${
+                                {/* <div>{`Supply: ${
                                     parseInt(String(supply?.data ?? 0), 10) - 1
                                 } / 5000`}</div>{' '}
                                 <div>OG x 3</div>
                                 <div>WL x 2</div>
-                                <div>PL x 5</div>
+                                <div>PL x 5</div> */}
                             </MintInfoV>
                         </InfoRight>
                     )}
@@ -298,7 +294,7 @@ export default function App() {
             <div className="PrevCollections">
                 <SlideCovers />
             </div>
-            <MintButton currentStage={currentStage} />
+            {/* <MintButton currentStage={currentStage} /> */}
         </>
     );
 }
