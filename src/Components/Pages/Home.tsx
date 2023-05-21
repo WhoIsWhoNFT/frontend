@@ -1,12 +1,12 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { SlideCovers } from '../Animated';
-import { MintButton } from '../Styled';
 import styled from 'styled-components';
 import Countdown from 'react-countdown';
-import { useCallback, useEffect } from 'react';
-import useDynamicContractRead from '../../Hooks/useDynamicContractRead';
+import useWeb3 from '../../Hooks/useWeb3';
+import RelayMintButton from '../Styled/RelayMintButton';
 import collectionConfig from '../../Constants/collection.config';
-import { SaleStage } from '../Functions/type';
+
+let supplyInterval: any = null;
 
 type TimerProps = {
     days?: number;
@@ -114,7 +114,7 @@ const Completionist = ({ currentStage }: { currentStage: string }) => {
             break;
     }
 
-    return <>{/* <Timer className="glow">{phase} good to go!</Timer> */}</>;
+    return <Timer className="glow">{phase} good to go!</Timer>;
 };
 
 const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
@@ -157,26 +157,20 @@ const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
 };
 
 export default function App() {
-    const supply = useDynamicContractRead('totalSupply');
-    const saleStage = useDynamicContractRead('getSaleStage');
-    const presaleDate = useDynamicContractRead('PRESALE_DATE');
+    const collection = useWeb3((state: any) => state.collection);
+    const presaleDateStatic = collectionConfig.presaleStartDate;
+    const presaleDateParsed = new Date(parseInt(String(presaleDateStatic)) * 1000);
+    const currentStage = 'PRESALE_WL';
 
-    const presaleDateStatic = 1684508400; // May 19, 3:00 PM UTC, May 19, 11:00 PM Manila Time
-    const presaleDateParsed = new Date(
-        parseInt(String(presaleDate?.data ?? presaleDateStatic)) * 1000,
-    );
-    const stageEnum = collectionConfig.stageEnum;
-    const currentStage = stageEnum[saleStage.data as keyof typeof stageEnum] as SaleStage;
+    // States
+    const [supply, setSupply] = useState(0);
+    const [isScreen1150, setIsScreen1150] = useState(false);
 
     // Get total supply in realtime
-    const getRealtimeTotalSupply = useCallback(() => supply.refetch(), [supply]);
-    const supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
-
-    // Get current sale stage in realtime
-    const getRealtimeCurrentStage = useCallback(() => saleStage.refetch(), [saleStage]);
-    const saleStageInterval = setInterval(getRealtimeCurrentStage, 1000);
-
-    const [isScreen1150, setIsScreen1150] = useState(false);
+    const getRealtimeTotalSupply = useCallback(async () => {
+        const totalSupply = await collection?.totalSupply();
+        setSupply(totalSupply);
+    }, [collection]);
 
     const handleResize = () => {
         setIsScreen1150(window.innerWidth < 1150);
@@ -185,7 +179,6 @@ export default function App() {
     useMemo(() => {
         window.addEventListener('resize', handleResize);
         handleResize();
-
         return () => {
             window.removeEventListener('resize', handleResize);
         };
@@ -193,17 +186,11 @@ export default function App() {
 
     useEffect(() => {
         getRealtimeTotalSupply();
+        supplyInterval = setInterval(getRealtimeTotalSupply, 1000);
         return () => {
             clearInterval(supplyInterval);
         };
-    }, [getRealtimeTotalSupply, supplyInterval]);
-
-    useEffect(() => {
-        getRealtimeCurrentStage();
-        return () => {
-            clearInterval(saleStageInterval);
-        };
-    }, [getRealtimeCurrentStage, saleStageInterval]);
+    }, [getRealtimeTotalSupply]);
 
     return (
         <>
@@ -211,17 +198,12 @@ export default function App() {
                 <BannerName>
                     {isScreen1150 ? (
                         <>
-                            {presaleDate !== undefined && (
-                                <Countdown
-                                    date={presaleDateParsed}
-                                    renderer={props => (
-                                        <Renderer
-                                            {...props}
-                                            currentStage={currentStage}
-                                        />
-                                    )}
-                                />
-                            )}
+                            <Countdown
+                                date={presaleDateParsed}
+                                renderer={props => (
+                                    <Renderer {...props} currentStage={currentStage} />
+                                )}
+                            />
                         </>
                     ) : (
                         <></>
@@ -232,14 +214,12 @@ export default function App() {
                     />
                     {isScreen1150 ? (
                         <MintInfo>
-                            {/* <div>
-                                {`Supply: ${
-                                    parseInt(String(supply?.data ?? 0), 10) - 1
-                                } / 5000`}
-                            </div>
+                            <div>{`Supply: ${
+                                parseInt(String(supply), 10) - 1
+                            } / 5000`}</div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
-                            <div>PL x 5</div> */}
+                            <div>PL x 5</div>
                         </MintInfo>
                     ) : (
                         <></>
@@ -280,12 +260,12 @@ export default function App() {
                                 }}
                             />
                             <MintInfoV>
-                                {/* <div>{`Supply: ${
-                                    parseInt(String(supply?.data ?? 0), 10) - 1
+                                <div>{`Supply: ${
+                                    parseInt(String(supply), 10) - 1
                                 } / 5000`}</div>{' '}
                                 <div>OG x 3</div>
                                 <div>WL x 2</div>
-                                <div>PL x 5</div> */}
+                                <div>PL x 5</div>
                             </MintInfoV>
                         </InfoRight>
                     )}
@@ -294,6 +274,7 @@ export default function App() {
             <div className="PrevCollections">
                 <SlideCovers />
             </div>
+            {new Date().getTime() / 1000 > presaleDateStatic && <RelayMintButton />}
             {/* <MintButton currentStage={currentStage} /> */}
         </>
     );

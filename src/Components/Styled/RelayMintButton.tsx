@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { getTotalCost } from '../Functions/type';
-import collectionConfig from '../../Constants/collection.config';
+import useMerkleTree from '../../Hooks/useMerkleTree';
+import { getProof } from '../Functions/merkleTree';
 import { ToastContainer, toast } from 'react-toastify';
-import { utils } from 'ethers';
+import useWhitelists from '../../Hooks/useWhitelists';
 import useWeb3 from '../../Hooks/useWeb3';
+import { getTotalCost } from '../Functions/type';
+import { utils } from 'ethers';
+import relayerConfig from '../../Constants/relayer.config';
 
 const BtnCounter = styled.button`
     width: 4.5rem;
@@ -84,28 +87,22 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
         })`};
 `;
 
-const MintButton: React.FC = () => {
-    const collection = useWeb3((state: any) => state.collection);
+const RelayMintButton: React.FC = () => {
     const ethBalance = useWeb3((state: any) => state.ethBalance);
+    const relayer = useWeb3((state: any) => state.relayer);
+    const account = useWeb3((state: any) => state.account);
+    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
+    const whitelistType = useWhitelists();
     const [mintCount, setMintCount] = useState(1);
-    const mintLimit = collectionConfig.maxMint.PUBLIC_SALE;
-
-    const handleIncrement = () => {
-        if (mintCount < mintLimit) {
-            setMintCount(prevCount => prevCount + 1);
-        }
-    };
-
-    const handleDecrement = () => {
-        if (mintCount > 1) {
-            setMintCount(prevCount => prevCount - 1);
-        }
-    };
 
     const handleMint = async () => {
         try {
+            if (whitelistType !== 'WL') {
+                throw new Error("Sorry you're not whitelisted!");
+            }
+
             const cost = getTotalCost(
-                Number(utils.parseEther(collectionConfig.publicSalePrice)),
+                Number(utils.parseEther(relayerConfig.price)),
                 mintCount,
             );
 
@@ -113,7 +110,10 @@ const MintButton: React.FC = () => {
                 throw new Error('Insufficient funds!');
             }
 
-            const event = await collection.mint(mintCount, { value: cost });
+            const proof = getProof(whitelistsMerkle?.tree, account as string);
+            const event = await relayer.mintRelay(mintCount, proof, {
+                value: cost,
+            });
 
             toast(`Transaction Hash: 0x...${event?.hash.slice(-4)}`, {
                 type: 'success',
@@ -137,7 +137,20 @@ const MintButton: React.FC = () => {
                 default:
                     break;
             }
+
             toast(errorMessage, { type: 'error' });
+        }
+    };
+
+    const handleIncrement = () => {
+        if (mintCount < 10) {
+            setMintCount(prevCount => prevCount + 1);
+        }
+    };
+
+    const handleDecrement = () => {
+        if (mintCount > 1) {
+            setMintCount(prevCount => prevCount - 1);
         }
     };
 
@@ -184,4 +197,4 @@ const MintButton: React.FC = () => {
     );
 };
 
-export default MintButton;
+export default RelayMintButton;

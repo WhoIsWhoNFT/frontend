@@ -3,24 +3,8 @@ import { useMemo, useState } from 'react';
 import { ButtonIcon } from './Components/Styled';
 import { Grills } from './Components/Animated';
 import { Home, Roadmap, Team, Whitelist } from './Components/Pages';
-import styled from 'styled-components';
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
-import { Web3Modal } from '@web3modal/react';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, sepolia, bscTestnet } from 'wagmi/chains';
 import ConnectButton from './Components/Styled/ConnectButton';
-
-const chains = [mainnet, sepolia, bscTestnet];
-const projectId = process.env.REACT_APP_WC_PROJECT_ID as string;
-const { provider } = configureChains(chains, [w3mProvider({ projectId })]);
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors: w3mConnectors({ projectId, version: 1, chains }),
-    provider,
-});
-
-const ethereumClient = new EthereumClient(wagmiClient, chains);
+import styled from 'styled-components';
 
 const Container = styled.div`
     position: relative;
@@ -155,57 +139,54 @@ function App() {
 
     return (
         <>
-            <WagmiConfig client={wagmiClient}>
-                <div className="App">
-                    <header className="App-header">
-                        <div className="Header-bar">
-                            <div className="Shape-circle" />
-                            <div className="Header-content">
-                                <HeaderText className="Header-contnet-left">
-                                    {!isScreen764 && Navigation()}
-                                </HeaderText>
-                                <div className="Header-content-right">
-                                    {!isScreen1045 && Socials()}
-                                    {!isScreen600 && <Grills />}
-                                    <ConnectButton />
-                                </div>
+            <div className="App">
+                <header className="App-header">
+                    <div className="Header-bar">
+                        <div className="Shape-circle" />
+                        <div className="Header-content">
+                            <HeaderText className="Header-contnet-left">
+                                {!isScreen764 && Navigation()}
+                            </HeaderText>
+                            <div className="Header-content-right">
+                                {!isScreen1045 && Socials()}
+                                {!isScreen600 && <Grills />}
+                                <ConnectButton />
                             </div>
-                            {isScreen1045 ? (
-                                <MobileHeader>
-                                    {isScreen764 ? Navigation() : <></>}
-                                    {!isScreen600 ? Socials() : <></>}
-                                </MobileHeader>
-                            ) : (
-                                <></>
-                            )}
-                            {isScreen600 && (
+                        </div>
+                        {isScreen1045 ? (
+                            <MobileHeader>
+                                {isScreen764 ? Navigation() : <></>}
+                                {!isScreen600 ? Socials() : <></>}
+                            </MobileHeader>
+                        ) : (
+                            <></>
+                        )}
+                        {isScreen600 && (
+                            <>
                                 <>
-                                    <>
-                                        <div
-                                            style={{
-                                                width: '100%',
-                                                marginTop: '1rem',
-                                                position: 'relative',
-                                            }}
-                                        >
-                                            {Socials()}
-                                        </div>
-                                    </>
+                                    <div
+                                        style={{
+                                            width: '100%',
+                                            marginTop: '1rem',
+                                            position: 'relative',
+                                        }}
+                                    >
+                                        {Socials()}
+                                    </div>
                                 </>
-                            )}
-                        </div>
-                    </header>
-                    <Container>
-                        <div style={{ width: '100%', padding: '1rem 0 0 0' }}>
-                            {tab === 0 ? <Home /> : <></>}
-                            {tab === 1 ? <Roadmap /> : <></>}
-                            {tab === 2 ? <Team /> : <></>}
-                            {tab === 3 ? <Whitelist /> : <></>}
-                        </div>
-                    </Container>
-                </div>
-            </WagmiConfig>
-            <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+                            </>
+                        )}
+                    </div>
+                </header>
+                <Container>
+                    <div style={{ width: '100%', padding: '1rem 0 0 0' }}>
+                        {tab === 0 ? <Home /> : <></>}
+                        {tab === 1 ? <Roadmap /> : <></>}
+                        {tab === 2 ? <Team /> : <></>}
+                        {tab === 3 ? <Whitelist /> : <></>}
+                    </div>
+                </Container>
+            </div>
         </>
     );
 }

@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import { ButtonGlitch } from '.';
-import { useState } from 'react';
 import { animated, useSpring } from '@react-spring/web';
-import { useWeb3Modal } from '@web3modal/react';
-import { useAccount, useDisconnect } from 'wagmi';
 import styled from 'styled-components';
+import useWeb3 from '../../Hooks/useWeb3';
 
 const DisconnectBtn = styled(animated.button)`
     width: 7.2rem;
@@ -31,34 +29,24 @@ const DisconnectBtn = styled(animated.button)`
 `;
 
 function ConnectButton() {
-    const { open } = useWeb3Modal();
-    const { isConnected, address } = useAccount();
-    const { disconnect } = useDisconnect();
-    const [connecting, setConnecting] = useState(false);
+    const connect = useWeb3((state: any) => state.connect);
+    const disconnect = useWeb3((state: any) => state.disconnect);
+    const account = useWeb3((state: any) => state.account);
+
     const [style, api] = useSpring(() => ({
         transform: 'translate(36.5%, -100%)',
     }));
 
-    const onOpen = async () => {
-        setConnecting(true);
-        await open();
-        setConnecting(false);
-    };
-
     const handleConnect = () => {
-        if (!isConnected) {
-            onOpen();
-        }
+        connect();
     };
 
     const handleDisconnect = () => {
-        if (isConnected) {
-            disconnect();
-        }
+        disconnect();
     };
 
     useEffect(() => {
-        if (isConnected) {
+        if (account) {
             api.start({
                 transform: 'translate(36.5%, 0%)',
             });
@@ -67,29 +55,30 @@ function ConnectButton() {
                 transform: 'translate(36.5%, -100%)',
             });
         }
-    }, [api, isConnected]);
+    }, [api, account]);
+
+    useEffect(() => {
+        if (localStorage.getItem('isConnected') === 'true') {
+            connect();
+        }
+    }, [connect]);
 
     return (
         <div style={{ position: 'relative', height: '6rem' }}>
             <ButtonGlitch
-                disabled={connecting}
-                signed={isConnected}
+                signed={account}
                 className="button-glitch"
                 style={{
                     margin: '0 -0.35rem 0 2rem',
-                    fontFamily: `${isConnected ? 'VT323, monospace' : 'aAnotherTag'}`,
-                    fontSize: `${isConnected ? '1rem' : ''}`,
-                    letterSpacing: isConnected ? '1.5px' : '3px',
+                    fontFamily: `${account ? 'VT323, monospace' : 'aAnotherTag'}`,
+                    fontSize: `${account ? '1rem' : ''}`,
+                    letterSpacing: account ? '1.5px' : '3px',
                     lineHeight: '20px',
                 }}
                 type="submit"
                 onClick={handleConnect}
             >
-                {connecting
-                    ? 'Loading...'
-                    : isConnected
-                    ? `0x...${address?.slice(-4)}`
-                    : 'Connect'}
+                {account ? `0x...${account?.slice(-4)}` : 'Connect'}
             </ButtonGlitch>
             <DisconnectBtn style={style} onClick={handleDisconnect}>
                 <span>Disconnect?</span>
