@@ -157,6 +157,7 @@ const Renderer: React.FC<TimerProps & { currentStage: string }> = ({
 };
 
 export default function App() {
+    const signer = useWeb3((state: any) => state.signer);
     const collection = useWeb3((state: any) => state.collection);
     const presaleDateStatic = collectionConfig.presaleStartDate;
     const presaleDateParsed = new Date(parseInt(String(presaleDateStatic)) * 1000);
@@ -215,7 +216,8 @@ export default function App() {
                     {isScreen1150 ? (
                         <MintInfo>
                             <div>{`Supply: ${
-                                parseInt(String(supply), 10) - 1
+                                parseInt(String(supply !== undefined ? supply : 1), 10) -
+                                1
                             } / 5000`}</div>
                             <div>OG x 3</div>
                             <div>WL x 2</div>
@@ -261,7 +263,10 @@ export default function App() {
                             />
                             <MintInfoV>
                                 <div>{`Supply: ${
-                                    parseInt(String(supply), 10) - 1
+                                    parseInt(
+                                        String(supply !== undefined ? supply : 1),
+                                        10,
+                                    ) - 1
                                 } / 5000`}</div>{' '}
                                 <div>OG x 3</div>
                                 <div>WL x 2</div>
@@ -274,7 +279,9 @@ export default function App() {
             <div className="PrevCollections">
                 <SlideCovers />
             </div>
-            {new Date().getTime() / 1000 > presaleDateStatic && <RelayMintButton />}
+            {new Date().getTime() / 1000 > presaleDateStatic && signer && (
+                <RelayMintButton />
+            )}
             {/* <MintButton currentStage={currentStage} /> */}
         </>
     );

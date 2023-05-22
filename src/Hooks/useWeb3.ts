@@ -29,30 +29,44 @@ const useWeb3 = create(set => ({
         params: [{ chainId }],
       });
     }
-    await provider.send('eth_requestAccounts', []);
-    const signer = provider.getSigner();
-    const account = await signer.getAddress();
-    const ethBalance = await provider.getBalance(account);
-    localStorage.setItem('isConnected', 'true');
 
-    // Connect contracts
-    const collection = new ethers.Contract(
-      collectionConfig[defaultNetwork].address,
-      collectionConfig.abi,
-      signer,
-    );
+    try {
+      await provider.send('eth_requestAccounts', []);
+      const signer = provider.getSigner();
+      const account = await signer.getAddress();
+      const ethBalance = await provider.getBalance(account);
+      localStorage.setItem('whoiswho.isConnected', 'true');
 
-    const relayer = new ethers.Contract(
-      relayerConfig[defaultNetwork].address,
-      relayerConfig.abi,
-      signer,
-    );
+      // Connect contracts
+      const collection = new ethers.Contract(
+        collectionConfig[defaultNetwork].address,
+        collectionConfig.abi,
+        signer,
+      );
 
-    set({ provider, signer, account, collection, relayer, ethBalance });
+      const relayer = new ethers.Contract(
+        relayerConfig[defaultNetwork].address,
+        relayerConfig.abi,
+        signer,
+      );
+
+      set({ provider, signer, account, collection, relayer, ethBalance });
+    } catch (error: any) {
+      let errorMessage = 'Error connecting with metamask';
+      switch (error?.code) {
+        case 4001:
+          errorMessage = 'User rejected the request';
+          break;
+        default:
+          break;
+      }
+
+      toast(errorMessage, { type: 'error' });
+    }
   },
   disconnect: () => {
     set({ provider: null, signer: null, account: null });
-    localStorage.removeItem('isConnected');
+    localStorage.removeItem('whoiswho.isConnected');
   },
 }));
 

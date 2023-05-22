@@ -30,6 +30,6 @@ export default {
     PUBLIC_SALE: 5,
     IDLE: 0,
   },
-  presaleStartDate: 1684699200,
+  presaleStartDate: 1684771200,
   publicSalePrice: '0.025',
 };

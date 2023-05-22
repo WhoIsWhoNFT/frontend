@@ -58,7 +58,7 @@ function ConnectButton() {
     }, [api, account]);
 
     useEffect(() => {
-        if (localStorage.getItem('isConnected') === 'true') {
+        if (localStorage.getItem('whoiswho.isConnected') === 'true') {
             connect();
         }
     }, [connect]);
