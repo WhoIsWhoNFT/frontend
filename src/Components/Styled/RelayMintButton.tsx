@@ -97,7 +97,7 @@ const RelayMintButton: React.FC = () => {
 
     const handleMint = async () => {
         try {
-            if (whitelistType !== 'WL') {
+            if (whitelistType === '') {
                 throw new Error("Sorry you're not whitelisted!");
             }
 
