@@ -28,13 +28,13 @@ export default [
     desc: 'Name:\n> UTO4KA\nRole:\n> Co-Founder\nDescription:\n> Co-Founder of Who is Who',
     pic: '0029.png',
   },
-  {
-    name: 'Shakewell',
-    role: 'Co-Founder',
-    css: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    desc: 'Name:\n> Shakewell\nRole:\n> Co-Founder\nDescription:\n> Co-Founder of Who is Who',
-    pic: '0003.png',
-  },
+  // {
+  //   name: 'Shakewell',
+  //   role: 'Co-Founder',
+  //   css: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  //   desc: 'Name:\n> Shakewell\nRole:\n> Co-Founder\nDescription:\n> Co-Founder of Who is Who',
+  //   pic: '0003.png',
+  // },
   {
     name: 'JustSlapz',
     role: 'Community Manager',

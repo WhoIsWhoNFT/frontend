@@ -3,7 +3,7 @@ import CollectionAbi from '../Abis/WhoIsWho.json';
 
 export default {
   sepolia: {
-    address: '0xb56208CD42c12d1c8AE389536BD42f5855779bF7',
+    address: '',
   },
   localhost: {
     address: '',
@@ -30,6 +30,6 @@ export default {
     PUBLIC_SALE: 5,
     IDLE: 0,
   },
-  presaleStartDate: 1684771200,
+  presaleStartDate: 1684854000,
   publicSalePrice: '0.025',
 };

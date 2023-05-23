@@ -121,7 +121,7 @@ const MintButton: React.FC = () => {
 
             await event.wait();
 
-            toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+            toast(`Yahoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
                 type: 'success',
             });
         } catch (error: any) {

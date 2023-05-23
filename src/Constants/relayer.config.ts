@@ -3,7 +3,7 @@ import RelayerAbi from '../Abis/Relayer.json';
 
 export default {
   sepolia: {
-    address: '0xF60E33ec41Feac0fC7d1B53675A6B6be7484ea73',
+    address: '',
   },
   localhost: {
     address: '',
@@ -15,7 +15,7 @@ export default {
     address: '',
   },
   mainnet: {
-    address: '',
+    address: '0x7fF6Da9F11D757DfF9cecF56e62cfc19011DBFEF',
   },
   abi: RelayerAbi.abi,
   price: '0.02',

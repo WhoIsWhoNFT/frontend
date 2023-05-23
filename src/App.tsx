@@ -126,7 +126,10 @@ function App() {
     const Socials = () => {
         return (
             <div className="Socials noselect">
-                <ButtonIcon icon="opensea" />
+                <ButtonIcon
+                    icon="opensea"
+                    link="https://opensea.io/collection/whoiswho-1"
+                />
                 <ButtonIcon
                     icon="instagram"
                     link="https://www.instagram.com/whoiswho.crew/"

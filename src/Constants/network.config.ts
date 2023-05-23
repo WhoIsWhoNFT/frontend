@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 
 export default {
-  defaultNetwork: 'sepolia',
+  defaultNetwork: 'mainnet',
   sepolia: {
     chainId: '0xAA36A7',
   },

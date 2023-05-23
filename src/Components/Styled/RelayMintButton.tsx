@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import useMerkleTree from '../../Hooks/useMerkleTree';
-import { getProof } from '../Functions/merkleTree';
 import { ToastContainer, toast } from 'react-toastify';
-import useWhitelists from '../../Hooks/useWhitelists';
 import useWeb3 from '../../Hooks/useWeb3';
 import { getTotalCost } from '../Functions/type';
 import { utils } from 'ethers';
@@ -90,17 +87,10 @@ const GlowWrapper = styled.div<{ color1?: string; color2?: string }>`
 const RelayMintButton: React.FC = () => {
     const ethBalance = useWeb3((state: any) => state.ethBalance);
     const relayer = useWeb3((state: any) => state.relayer);
-    const account = useWeb3((state: any) => state.account);
-    const whitelistsMerkle = useMerkleTree({ leaf: 'whitelists' });
-    const whitelistType = useWhitelists();
     const [mintCount, setMintCount] = useState(1);
 
     const handleMint = async () => {
         try {
-            if (whitelistType === '') {
-                throw new Error("Sorry you're not whitelisted!");
-            }
-
             const cost = getTotalCost(
                 Number(utils.parseEther(relayerConfig.price)),
                 mintCount,
@@ -110,8 +100,7 @@ const RelayMintButton: React.FC = () => {
                 throw new Error('Insufficient funds!');
             }
 
-            const proof = getProof(whitelistsMerkle?.tree, account as string);
-            const event = await relayer.mintRelay(mintCount, proof, {
+            const event = await relayer.mintRelay(mintCount, {
                 value: cost,
             });
 
@@ -121,7 +110,7 @@ const RelayMintButton: React.FC = () => {
 
             await event.wait();
 
-            toast(`Yohoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
+            toast(`Yahoo! You successfully minted a WhoIsWho NFT 🎉 🎉`, {
                 type: 'success',
             });
         } catch (error: any) {

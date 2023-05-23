@@ -102,11 +102,11 @@ const Completionist = ({ currentStage }: { currentStage: string }) => {
             break;
 
         case 'PRESALE_WL':
-            phase = 'WLs are';
+            phase = 'You are';
             break;
 
         case 'PUBLIC_SALE':
-            phase = 'WLs are';
+            phase = 'You are';
             break;
 
         default:
