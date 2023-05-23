@@ -2,7 +2,6 @@
 import CollectionAbi from '../Abis/WhoIsWho.json';
 
 export default {
-  defaultNetwork: 'mainnet',
   sepolia: {
     address: '',
   },
@@ -31,4 +30,6 @@ export default {
     PUBLIC_SALE: 5,
     IDLE: 0,
   },
+  presaleStartDate: 1684854000,
+  publicSalePrice: '0.025',
 };

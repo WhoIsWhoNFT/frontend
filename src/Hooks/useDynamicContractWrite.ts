@@ -1,6 +1,7 @@
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import collectionConfig from '../Constants/collection.config';
 import { Networks } from '../Components/Functions/type';
+import networkConfig from '../Constants/network.config';
 
 type Functions = 'ogMint' | 'wlMint' | 'mint';
 
@@ -9,7 +10,7 @@ const useDynamicContractWrite = (
   args: any[],
   overrides: Record<string, any>,
 ) => {
-  const { defaultNetwork } = collectionConfig;
+  const { defaultNetwork } = networkConfig;
   const contractAddress = collectionConfig[defaultNetwork as Networks]
     .address as `0x${string}`;
 

@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { MerkleTree } from 'merkletreejs';
 import keccak256 from 'keccak256';
-import { useEffect, useState } from 'react';
 
 function useMerkleTree({ leaf }: { leaf: 'oglists' | 'whitelists' }) {
   const [tree, setTree] = useState<MerkleTree | null>(null);
